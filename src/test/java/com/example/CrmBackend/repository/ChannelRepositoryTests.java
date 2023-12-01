@@ -6,7 +6,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
 
 /**
@@ -14,11 +13,14 @@ import java.util.List;
  * tested save() and findAll()
  */
 @SpringBootTest
-class ChannelRepositoryTests {
+class ChannelRepositoryTests<Optional> {
 
     @Autowired
     ChannelRepository ChannelRepository;
 
+    /**
+     * test save()
+     */
     @Test
     void ChannelRepository_SaveChannel() {
 
@@ -31,6 +33,9 @@ class ChannelRepositoryTests {
         Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
     }
 
+    /**
+     * test finAll()
+     */
     @Test
     public void ChannelRepository_GetAllChannels() {
         // Create and save 2 Channels
@@ -46,6 +51,47 @@ class ChannelRepositoryTests {
         // Assert both Channels are created and saved
         Assertions.assertThat(ChannelList).isNotNull();
         Assertions.assertThat(ChannelList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test update
+     */
+    @Test
+    void ChannelRepository_UpdateChannel() {
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        ChannelRepository.save(testChannel);
+
+        // Modify the Channel's properties
+        testChannel.setName("UpdatedChannelName");
+        testChannel.setMain(true);
+
+        // Update the Channel in the repository
+        Channel updatedChannel = ChannelRepository.save(testChannel);
+
+        // Assert that the Channel is updated successfully
+        Assertions.assertThat(updatedChannel).isNotNull();
+        Assertions.assertThat(updatedChannel.getName()).isEqualTo("UpdatedChannelName");
+        Assertions.assertThat(updatedChannel.isMain()).isTrue();
+    }
+
+    /**
+     * test delete()
+     */
+    @Test
+    void ChannelRepository_DeleteChannel() {
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        ChannelRepository.save(testChannel);
+
+        // Delete the Channel from the repository
+        ChannelRepository.delete(testChannel);
+
+        // Try to retrieve the deleted Channel
+        Channel deletedChannel = ChannelRepository.findById(testChannel.getId()).orElse(null);
+
+        // Assert that the Channel is deleted successfully
+        Assertions.assertThat(deletedChannel).isNull();
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.List;
 class MessageRepositoryTests {
 
     @Autowired
-    MessageRepository MessageRepository;
+    MessageRepository messageRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -41,7 +41,7 @@ class MessageRepositoryTests {
 
         //Create test message with user and channel created before
         Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
-        MessageRepository.save(testMessage);
+        messageRepository.save(testMessage);
 
         // Assert Message is created and with correct id
         Assertions.assertThat(testMessage).isNotNull();
@@ -61,15 +61,70 @@ class MessageRepositoryTests {
         //Create 2 test messages with user and channel created before
         Message testMessage1 = new Message("testContent1", testUser.getId(), testChannel.getId());
         Message testMessage2 = new Message("testContent2", testUser.getId(), testChannel.getId());
-        MessageRepository.save(testMessage1);
-        MessageRepository.save(testMessage2);
+        messageRepository.save(testMessage1);
+        messageRepository.save(testMessage2);
 
         // Get all Messages
-        List<Message> MessageList = MessageRepository.findAll();
+        List<Message> MessageList = messageRepository.findAll();
 
         // Assert both Messages are created and saved
         Assertions.assertThat(MessageList).isNotNull();
         Assertions.assertThat(MessageList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test update
+     */
+    @Test
+    void MessageRepository_UpdateMessage() {
+        // Create and save a test User
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        channelRepository.save(testChannel);
+
+        // Create and save a test Message
+        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        messageRepository.save(testMessage);
+
+        // Modify the Message's properties
+        testMessage.setContent("UpdatedContent");
+
+        // Update the Message in the repository
+        Message updatedMessage = messageRepository.save(testMessage);
+
+        // Assert that the Message is updated successfully
+        Assertions.assertThat(updatedMessage).isNotNull();
+        Assertions.assertThat(updatedMessage.getContent()).isEqualTo("UpdatedContent");
+    }
+
+    /**
+     * test delete()
+     */
+    @Test
+    void MessageRepository_DeleteMessage() {
+        // Create and save a test User
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        channelRepository.save(testChannel);
+
+        // Create and save a test Message
+        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        messageRepository.save(testMessage);
+
+        // Delete the Message from the repository
+        messageRepository.delete(testMessage);
+
+        // Try to retrieve the deleted Message
+        Message deletedMessage = messageRepository.findById(testMessage.getId()).orElse(null);
+
+        // Assert that the Message is deleted successfully
+        Assertions.assertThat(deletedMessage).isNull();
     }
 
 }
