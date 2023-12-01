@@ -44,7 +44,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         //Create test message with user and channel created before
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Assert Message is created and with correct id
@@ -63,8 +63,8 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         //Create 2 test messages with user and channel created before
-        Message testMessage1 = new Message("testContent1", testUser.getId(), testChannel.getId());
-        Message testMessage2 = new Message("testContent2", testUser.getId(), testChannel.getId());
+        Message testMessage1 = new Message("testContent1", testUser, testChannel);
+        Message testMessage2 = new Message("testContent2", testUser, testChannel);
         messageRepository.save(testMessage1);
         messageRepository.save(testMessage2);
 
@@ -90,7 +90,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         // Create and save a test Message
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Modify the Message's properties
@@ -118,7 +118,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         // Create and save a test Message
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Delete the Message from the repository
