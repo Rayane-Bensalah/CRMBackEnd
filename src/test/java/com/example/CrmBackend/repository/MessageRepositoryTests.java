@@ -4,10 +4,12 @@ import com.example.CrmBackend.model.Channel;
 import com.example.CrmBackend.model.Message;
 import com.example.CrmBackend.model.User;
 import com.example.CrmBackend.repository.MessageRepository;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
  * Tests for MessageRepository
  * tested save() and findAll()
  */
+@DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database
 @SpringBootTest
 class MessageRepositoryTests {
 
@@ -40,7 +44,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         //Create test message with user and channel created before
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Assert Message is created and with correct id
@@ -59,8 +63,8 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         //Create 2 test messages with user and channel created before
-        Message testMessage1 = new Message("testContent1", testUser.getId(), testChannel.getId());
-        Message testMessage2 = new Message("testContent2", testUser.getId(), testChannel.getId());
+        Message testMessage1 = new Message("testContent1", testUser, testChannel);
+        Message testMessage2 = new Message("testContent2", testUser, testChannel);
         messageRepository.save(testMessage1);
         messageRepository.save(testMessage2);
 
@@ -86,7 +90,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         // Create and save a test Message
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Modify the Message's properties
@@ -114,7 +118,7 @@ class MessageRepositoryTests {
         channelRepository.save(testChannel);
 
         // Create and save a test Message
-        Message testMessage = new Message("testContent", testUser.getId(), testChannel.getId());
+        Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
         // Delete the Message from the repository
