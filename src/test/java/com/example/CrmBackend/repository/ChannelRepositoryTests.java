@@ -1,7 +1,7 @@
 package com.example.CrmBackend.repository;
 
-import com.example.CrmBackend.model.Channel;
-import com.example.CrmBackend.repository.ChannelRepository;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.util.List;
+
+import com.example.CrmBackend.model.Channel;
 
 /**
  * Tests for ChannelRepository

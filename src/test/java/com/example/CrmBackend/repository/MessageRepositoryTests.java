@@ -1,9 +1,7 @@
 package com.example.CrmBackend.repository;
 
-import com.example.CrmBackend.model.Channel;
-import com.example.CrmBackend.model.Message;
-import com.example.CrmBackend.model.User;
-import com.example.CrmBackend.repository.MessageRepository;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import com.example.CrmBackend.model.Channel;
+import com.example.CrmBackend.model.Message;
+import com.example.CrmBackend.model.User;
 
 /**
  * Tests for MessageRepository
@@ -43,7 +43,7 @@ class MessageRepositoryTests {
         Channel testChannel = new Channel("testChannelname", false);
         channelRepository.save(testChannel);
 
-        //Create test message with user and channel created before
+        // Create test message with user and channel created before
         Message testMessage = new Message("testContent", testUser, testChannel);
         messageRepository.save(testMessage);
 
@@ -62,7 +62,7 @@ class MessageRepositoryTests {
         Channel testChannel = new Channel("testChannelname", false);
         channelRepository.save(testChannel);
 
-        //Create 2 test messages with user and channel created before
+        // Create 2 test messages with user and channel created before
         Message testMessage1 = new Message("testContent1", testUser, testChannel);
         Message testMessage2 = new Message("testContent2", testUser, testChannel);
         messageRepository.save(testMessage1);
