@@ -1,4 +1,4 @@
-package com.example.CrmBackend;
+package com.example.CrmBackend.repository;
 
 import com.example.CrmBackend.model.User;
 import com.example.CrmBackend.repository.UserRepository;
@@ -9,6 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+/**
+ * Tests for UserRepository
+ * tested save() and findAll()
+ */
 @SpringBootTest
 class UserRepositoryTests {
 
