@@ -20,7 +20,7 @@ public class Message {
   /** Id of user */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
 
   /** Content of the message */
   @Column(name = "content")
@@ -57,14 +57,14 @@ public class Message {
   /**
    * @return id
    */
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
   /**
-   * @return id
+   * @param id id of message
    */
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -76,21 +76,21 @@ public class Message {
   }
 
   /**
-   * @param content ccontent of message
+   * @param content content of message
    */
   public void setContent(String content) {
     this.content = content;
   }
 
   /**
-   * @param user User
+   * @return user
    */
   public User getUser() {
     return user;
   }
 
   /**
-   * @param User User
+   * @param user User
    */
   public void setUser(User user) {
     this.user = user;

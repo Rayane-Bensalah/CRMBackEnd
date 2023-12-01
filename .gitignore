@@ -5,6 +5,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### application.properties ###
+src/main/resources/application.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -36,4 +39,5 @@ build/
 .fake
 
 .env*
-src/main/resources/application.properties
+
+lombok.config
