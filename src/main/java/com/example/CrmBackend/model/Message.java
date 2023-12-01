@@ -1,12 +1,16 @@
 package com.example.CrmBackend.model;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 /** Message */
 @Entity
@@ -22,28 +26,32 @@ public class Message {
   @Column(name = "content")
   private String content;
 
-  /** User id of the message */
-  @Column(name = "user_id")
-  Integer userId;
+  /** User object */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-  @Column(name = "channel_id")
-  Integer channelId;
+  /** Channel object */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "channel_id", nullable = false)
+  private Channel channel;
 
   @Column(name = "send_date")
   LocalDateTime sendDate;
 
-  public Message() {}
+  public Message() {
+  }
 
   /**
    * @param content Content of message
-   * @param userId User id
-   * @param channelId Channel id
+   * @param user    User object
+   * @param channel Channel object
    */
-  public Message(String content, Integer userId, Integer channelId) {
-    content = this.content;
-    userId = this.userId;
-    channelId = this.channelId;
-    sendDate = LocalDateTime.now();
+  public Message(String content, User user, Channel channel) {
+    this.content = content;
+    this.user = user;
+    this.channel = channel;
+    this.sendDate = LocalDateTime.now();
   }
 
   /**
@@ -75,31 +83,31 @@ public class Message {
   }
 
   /**
-   * @param userId Id of user
+   * @param user User
    */
-  public Integer getUserId() {
-    return userId;
+  public User getUser() {
+    return user;
   }
 
   /**
-   * @param userId User id
+   * @param User User
    */
-  public void setUserId(Integer userId) {
-    this.userId = userId;
+  public void setUser(User user) {
+    this.user = user;
   }
 
   /**
-   * @return channel id
+   * @return Channel
    */
-  public Integer getChannelId() {
-    return channelId;
+  public Channel getChannel() {
+    return channel;
   }
 
   /**
-   * @param channelId set the channel id
+   * @param channel set the channel id
    */
-  public void setChannelId(Integer channelId) {
-    this.channelId = channelId;
+  public void setChannel(Channel channel) {
+    this.channel = channel;
   }
 
   /**

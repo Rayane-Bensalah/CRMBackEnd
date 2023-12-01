@@ -1,12 +1,18 @@
 package com.example.CrmBackend.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 /** User */
 @Entity
@@ -35,13 +41,18 @@ public class User {
   @Column(name = "updated_at")
   LocalDateTime updatedAt;
 
-  public User() {}
+  /** User messages */
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Message> messages = new ArrayList<>();
+
+  public User() {
+  }
 
   /**
-   * @param userName User pseudo
+   * @param userName  User pseudo
    * @param firstName User first Name
-   * @param lastName User last name
-   * @param email User email
+   * @param lastName  User last name
+   * @param email     User email
    */
   public User(String userName, String firstName, String lastName, String email) {
     userName = this.userName;

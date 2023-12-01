@@ -1,12 +1,18 @@
 package com.example.CrmBackend.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 /** Channel */
 @Entity
@@ -26,11 +32,16 @@ public class Channel {
   @Column(name = "created_at")
   LocalDateTime createdAt;
 
+  /* Channel messages */
+  @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Message> messages = new ArrayList<>();
+
   /** Empty constructor */
-  public Channel() {}
+  public Channel() {
+  }
 
   /**
-   * @param name Name of the channel
+   * @param name   Name of the channel
    * @param isMain boolean value to determine if the channel is the main channel
    */
   public Channel(String name, boolean isMain) {
