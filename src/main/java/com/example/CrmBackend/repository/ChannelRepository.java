@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * repository for entity Channel extending JpaRepository
  */
-public interface ChannelRepository extends JpaRepository<Channel, Long> {
+public interface ChannelRepository extends JpaRepository<Channel, Integer> {
 }
