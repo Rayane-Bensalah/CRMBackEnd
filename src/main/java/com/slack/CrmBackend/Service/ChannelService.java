@@ -36,9 +36,8 @@ public class ChannelService {
     return uRepository.save(nChannel);
   }
 
-  //
   /**
-   * @param channelId id of channelr to update
+   * @param channelId id of channel to update
    * @param updateChannel Data of channel uupdated
    * @return saved channel or null
    */
@@ -53,9 +52,9 @@ public class ChannelService {
   }
 
   /**
-   * @param channelId Id of channelr to delete
+   * @param channelId Id of channel to delete
    */
-  public void deletChannel(Integer channelId) {
+  public void deleteChannel(Integer channelId) {
     uRepository.deleteById(channelId);
   }
 }

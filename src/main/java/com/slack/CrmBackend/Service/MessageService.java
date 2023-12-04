@@ -54,7 +54,7 @@ public class MessageService {
   /**
    * @param MessageId Id of messager to delete
    */
-  public void deletMessage(Integer messageId) {
+  public void deleteMessage(Integer messageId) {
     mRepository.deleteById(messageId);
   }
 

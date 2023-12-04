@@ -54,7 +54,7 @@ public class UserService {
   /**
    * @param userId Id of user to delete
    */
-  public void deletUser(Integer userId) {
+  public void deleteUser(Integer userId) {
     uRepository.deleteById(userId);
   }
 }
