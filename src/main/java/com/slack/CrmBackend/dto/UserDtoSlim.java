@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Message Dto
+ * User Dto Slim
  */
 @Getter
 @Setter
 @NoArgsConstructor
-public class MessageDto {
+public class UserDtoSlim {
     private Integer id;
-    private String content;
-    private UserDto user;
-    private ChannelDto channel;
-    LocalDateTime sendDate;
+    private String userName;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

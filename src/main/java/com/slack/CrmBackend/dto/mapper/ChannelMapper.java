@@ -1,11 +1,14 @@
 package com.slack.CrmBackend.dto.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 import com.slack.CrmBackend.dto.ChannelDto;
+import com.slack.CrmBackend.dto.ChannelDtoSlim;
 import com.slack.CrmBackend.model.Channel;
 
 /**
@@ -24,5 +27,22 @@ public interface ChannelMapper {
      * @return ChannelDto
      */
     @Mapping(target = "messages", ignore = true)
-    ChannelDto channelToChannelDto(Channel channel);
+    ChannelDto channelToDto(Channel channel);
+
+    /**
+     * Convert Channel entity to Channel DTO Slim
+     *
+     * @param Channel channel
+     * @return ChannelDtoSlim
+     */
+    ChannelDtoSlim channelToSlimDto(Channel channel);
+
+    /**
+     * Convert Channels List to Channels DTO List
+     * 
+     * @param Channels List
+     * @return ChannelDto List
+     */
+    // @Mapping(target = "messages", ignore = true)
+    List<ChannelDto> channelsToDto(List<Channel> channels);
 }

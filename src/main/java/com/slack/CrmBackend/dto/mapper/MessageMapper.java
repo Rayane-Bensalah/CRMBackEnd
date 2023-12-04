@@ -1,5 +1,7 @@
 package com.slack.CrmBackend.dto.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -24,5 +26,16 @@ public interface MessageMapper {
      * @return MessageDto
      */
     @Mapping(target = "channel", ignore = true)
-    MessageDto messageToMessageDto(Message message);
+    @Mapping(target = "user", ignore = true)
+    MessageDto messageToDto(Message message);
+
+    /**
+     * Convert Message List to Message DTO List
+     * 
+     * @param Message List
+     * @return MessageDto List
+     */
+    @Mapping(target = "channel", ignore = false)
+    @Mapping(target = "user", ignore = false)
+    List<MessageDto> messagesToDto(List<Message> messages);
 }
