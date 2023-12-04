@@ -15,7 +15,7 @@ import lombok.Setter;
 public class MessageDto {
     private Integer id;
     private String content;
-    private UserDto user;
-    private ChannelDto channel;
+    private UserDtoSlim user;
+    private ChannelDtoSlim channel;
     LocalDateTime sendDate;
 }
