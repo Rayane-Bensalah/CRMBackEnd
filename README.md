@@ -124,7 +124,7 @@ Project Link: [CRM Backend](https://github.com/Rayane-Bensalah/CRMBackend)
 
 Authors :
 
-- [Rayane Bensalkah](https://github.com/Rayane-Bensalah)
+- [Rayane Bensalah](https://github.com/Rayane-Bensalah)
 - [Mateo BRUNETTI](https://github.com/MateoBrunetti)
 - [David SALAVESSA](https://github.com/DsTechX)
 
