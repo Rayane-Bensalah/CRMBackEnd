@@ -1,4 +1,4 @@
-package com.example.CrmBackend.repository;
+package com.slack.CrmBackend.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.CrmBackend.model.User;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for UserRepository

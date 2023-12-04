@@ -1,4 +1,4 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,10 +36,10 @@ public class User {
   private String email;
 
   @Column(name = "created_at")
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
-  LocalDateTime updatedAt;
+  private LocalDateTime updatedAt;
 
   /** User messages */
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -55,11 +55,11 @@ public class User {
    * @param email     User email
    */
   public User(String userName, String firstName, String lastName, String email) {
-    userName = this.userName;
-    firstName = this.firstName;
-    lastName = this.lastName;
-    email = this.email;
-    createdAt = LocalDateTime.now();
+    this.userName = userName;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.createdAt = LocalDateTime.now();
   }
 
   public Integer getId() {
@@ -116,5 +116,19 @@ public class User {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  /**
+   * @return User messages
+   */
+  public List<Message> getMessages() {
+    return this.messages;
+  }
+
+  /**
+   * @param List<Message> User messages
+   */
+  public void setMessages(List<Message> messages) {
+    this.messages = messages;
   }
 }

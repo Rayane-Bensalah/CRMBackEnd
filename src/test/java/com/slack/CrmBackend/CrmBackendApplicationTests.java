@@ -1,4 +1,4 @@
-package com.example.CrmBackend;
+package com.slack.CrmBackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

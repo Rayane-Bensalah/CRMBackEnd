@@ -1,4 +1,4 @@
-package com.example.CrmBackend.repository;
+package com.slack.CrmBackend.repository;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.CrmBackend.model.Channel;
-import com.example.CrmBackend.model.Message;
-import com.example.CrmBackend.model.User;
+import com.slack.CrmBackend.model.Channel;
+import com.slack.CrmBackend.model.Message;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for MessageRepository
