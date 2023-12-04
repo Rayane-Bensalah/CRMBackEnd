@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.slack.CrmBackend.model.Channel;
 import com.slack.CrmBackend.model.Message;
@@ -38,26 +37,6 @@ class MessageServicesTests {
     ChannelService channelService = Mockito.mock(ChannelService.class);
 
     @Test
-    void MessageService_SaveMessage() {
-
-        // Create test user and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userService.createUser(testUser);
-
-        // Create test channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        channelService.createChannel(testChannel);
-
-        // Create test message with user and channel created before
-        Message testMessage = new Message("testContent", testUser, testChannel);
-        messageService.createmessage(testMessage);
-
-        // Assert Message is created and with correct id
-        Assertions.assertThat(testMessage).isNotNull();
-        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
-    }
-
-    @Test
     public void MessageService_GetAllMessages() {
         // Create and save user & channel
 
@@ -70,15 +49,35 @@ class MessageServicesTests {
         // Create 2 test messages with user and channel created before
         Message testMessage1 = new Message("testContent1", testUser, testChannel);
         Message testMessage2 = new Message("testContent2", testUser, testChannel);
-        messageService.createmessage(testMessage1);
-        messageService.createmessage(testMessage2);
+        messageService.createMessage(testMessage1);
+        messageService.createMessage(testMessage2);
 
         // Get all Messages
-        List<Message> MessageList = messageService.getAllmessage();
+        List<Message> MessageList = messageService.getAllMessages();
 
         // Assert both Messages are created and saved
         Assertions.assertThat(MessageList).isNotNull();
         Assertions.assertThat(MessageList.size()).isEqualTo(2);
+    }
+
+    @Test
+    void MessageService_SaveMessage() {
+
+        // Create test user and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userService.createUser(testUser);
+
+        // Create test channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        channelService.createChannel(testChannel);
+
+        // Create test message with user and channel created before
+        Message testMessage = new Message("testContent", testUser, testChannel);
+        messageService.createMessage(testMessage);
+
+        // Assert Message is created and with correct id
+        Assertions.assertThat(testMessage).isNotNull();
+        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
     }
 
     /**
@@ -96,13 +95,13 @@ class MessageServicesTests {
 
         // Create and save a test Message
         Message testMessage = new Message("testContent", testUser, testChannel);
-        messageService.createmessage(testMessage);
+        messageService.createMessage(testMessage);
 
         // Modify the Message's properties
         testMessage.setContent("UpdatedContent");
 
         // Update the Message in the service
-        Message updatedMessage = messageService.createmessage(testMessage);
+        Message updatedMessage = messageService.createMessage(testMessage);
 
         // Assert that the Message is updated successfully
         Assertions.assertThat(updatedMessage).isNotNull();
@@ -124,13 +123,13 @@ class MessageServicesTests {
 
         // Create and save a test Message
         Message testMessage = new Message("testContent", testUser, testChannel);
-        messageService.createmessage(testMessage);
+        messageService.createMessage(testMessage);
 
         // Delete the Message from the service
         messageService.deleteMessage(testMessage.getId());
 
         // Try to retrieve the deleted Message
-        Message deletedMessage = messageService.getmessageById(testMessage.getId()).orElse(null);
+        Message deletedMessage = messageService.getMessageById(testMessage.getId()).orElse(null);
 
         // Assert that the Message is deleted successfully
         Assertions.assertThat(deletedMessage).isNull();
