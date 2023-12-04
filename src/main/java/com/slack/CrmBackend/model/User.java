@@ -42,8 +42,8 @@ public class User {
   private LocalDateTime updatedAt;
 
   /** User messages */
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<Message> messages = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Message> messages = new ArrayList<Message>();
 
   public User() {
   }
