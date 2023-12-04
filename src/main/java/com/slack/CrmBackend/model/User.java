@@ -1,12 +1,18 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 /** User */
 @Entity
@@ -30,25 +36,30 @@ public class User {
   private String email;
 
   @Column(name = "created_at")
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
-  LocalDateTime updatedAt;
+  private LocalDateTime updatedAt;
 
-  public User() {}
+  /** User messages */
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Message> messages = new ArrayList<>();
+
+  public User() {
+  }
 
   /**
-   * @param userName User pseudo
+   * @param userName  User pseudo
    * @param firstName User first Name
-   * @param lastName User last name
-   * @param email User email
+   * @param lastName  User last name
+   * @param email     User email
    */
   public User(String userName, String firstName, String lastName, String email) {
-    userName = this.userName;
-    firstName = this.firstName;
-    lastName = this.lastName;
-    email = this.email;
-    createdAt = LocalDateTime.now();
+    this.userName = userName;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.createdAt = LocalDateTime.now();
   }
 
   public Integer getId() {
@@ -105,5 +116,19 @@ public class User {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  /**
+   * @return User messages
+   */
+  public List<Message> getMessages() {
+    return this.messages;
+  }
+
+  /**
+   * @param List<Message> User messages
+   */
+  public void setMessages(List<Message> messages) {
+    this.messages = messages;
   }
 }

@@ -1,4 +1,4 @@
-package com.example.CrmBackend;
+package com.slack.CrmBackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

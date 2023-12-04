@@ -1,12 +1,18 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 /** Channel */
 @Entity
@@ -24,18 +30,24 @@ public class Channel {
   private boolean isMain;
 
   @Column(name = "created_at")
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
+
+  /* Channel messages */
+  @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Message> messages = new ArrayList<>();
 
   /** Empty constructor */
-  public Channel() {}
+  public Channel() {
+  }
 
   /**
-   * @param name Name of the channel
+   * @param name   Name of the channel
    * @param isMain boolean value to determine if the channel is the main channel
    */
   public Channel(String name, boolean isMain) {
-    name = this.name;
-    isMain = this.isMain;
+    this.name = name;
+    this.isMain = isMain;
+    createdAt = LocalDateTime.now();
   }
 
   /**
@@ -92,5 +104,19 @@ public class Channel {
    */
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
+  }
+
+  /**
+   * @return Channel messages
+   */
+  public List<Message> getMessages() {
+    return this.messages;
+  }
+
+  /**
+   * @param List<Message> Channel messages
+   */
+  public void setMessages(List<Message> messages) {
+    this.messages = messages;
   }
 }
