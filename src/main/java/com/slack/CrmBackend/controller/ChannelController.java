@@ -45,7 +45,7 @@ public class ChannelController {
 
         if (existingChannel.isPresent()) {
             channel.setId(id);
-            Channel updatedChannel = channelService.createChannel(channel);
+            Channel updatedChannel = channelService.updateChannel(id, channel);
             return ResponseEntity.ok(updatedChannel);
         } else {
             return ResponseEntity.notFound().build();

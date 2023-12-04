@@ -45,7 +45,7 @@ public class MessageController {
 
         if (existingMessage.isPresent()) {
             message.setId(id);
-            Message updatedMessage = messageService.createMessage(message);
+            Message updatedMessage = messageService.updateMessage(id, message);
             return ResponseEntity.ok(updatedMessage);
         } else {
             return ResponseEntity.notFound().build();

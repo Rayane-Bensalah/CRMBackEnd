@@ -45,7 +45,7 @@ public class UserController {
 
         if (existingUser.isPresent()) {
             user.setId(id);
-            User updatedUser = userService.createUser(user);
+            User updatedUser = userService.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
         } else {
             return ResponseEntity.notFound().build();
