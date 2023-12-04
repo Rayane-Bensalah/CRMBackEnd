@@ -1,4 +1,4 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
 import java.time.LocalDateTime;
 
@@ -123,4 +123,5 @@ public class Message {
   public void setSendDate(LocalDateTime sendDate) {
     this.sendDate = sendDate;
   }
+
 }

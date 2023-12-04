@@ -39,5 +39,3 @@ build/
 .fake
 
 .env*
-
-lombok.config

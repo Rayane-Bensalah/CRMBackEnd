@@ -1,4 +1,4 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ public class Channel {
   private boolean isMain;
 
   @Column(name = "created_at")
-  LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
   /* Channel messages */
-  @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Message> messages = new ArrayList<>();
 
   /** Empty constructor */
@@ -45,8 +45,9 @@ public class Channel {
    * @param isMain boolean value to determine if the channel is the main channel
    */
   public Channel(String name, boolean isMain) {
-    name = this.name;
-    isMain = this.isMain;
+    this.name = name;
+    this.isMain = isMain;
+    createdAt = LocalDateTime.now();
   }
 
   /**
@@ -103,5 +104,19 @@ public class Channel {
    */
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
+  }
+
+  /**
+   * @return Channel messages
+   */
+  public List<Message> getMessages() {
+    return this.messages;
+  }
+
+  /**
+   * @param List<Message> Channel messages
+   */
+  public void setMessages(List<Message> messages) {
+    this.messages = messages;
   }
 }
