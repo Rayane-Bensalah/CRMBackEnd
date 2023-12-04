@@ -14,7 +14,7 @@ import com.slack.CrmBackend.model.User;
  * User Dto Mapper
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {
-        User.class, UserDto.class })
+        User.class, UserDto.class, UserDtoSlim.class })
 public interface UserMapper {
     /**
      * Providing access to the mapper implementation and avoid test errors

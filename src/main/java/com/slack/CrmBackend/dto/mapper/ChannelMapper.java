@@ -15,7 +15,7 @@ import com.slack.CrmBackend.model.Channel;
  * Channel Dto Mapper
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {
-        Channel.class, ChannelDto.class })
+        Channel.class, ChannelDto.class, ChannelDtoSlim.class })
 public interface ChannelMapper {
     /**
      * Providing access to the mapper implementation and avoid test errors

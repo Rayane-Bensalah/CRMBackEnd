@@ -9,18 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.slack.CrmBackend.dto.mapper.ChannelMapper;
 import com.slack.CrmBackend.model.Channel;
 import com.slack.CrmBackend.repository.ChannelRepository;
 
+import jakarta.transaction.Transactional;
+
 /**
  * Tests for Channel Dto
  * tested save() and findAll()
  */
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database
-@DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@SpringBootTest
+@Transactional
 public class ChannelDtoTests {
 
     /**

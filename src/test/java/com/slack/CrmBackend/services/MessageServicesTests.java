@@ -2,26 +2,27 @@ package com.slack.CrmBackend.services;
 
 import java.util.List;
 
-import com.slack.CrmBackend.Service.ChannelService;
-import com.slack.CrmBackend.Service.MessageService;
-import com.slack.CrmBackend.Service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import com.slack.CrmBackend.model.Channel;
-import com.slack.CrmBackend.model.Message;
-import com.slack.CrmBackend.model.User;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.slack.CrmBackend.Service.ChannelService;
+import com.slack.CrmBackend.Service.MessageService;
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.model.Channel;
+import com.slack.CrmBackend.model.Message;
+import com.slack.CrmBackend.model.User;
+
 /**
  * Tests for MessageService
- *  * Use of @Transactional annotation causes the test to be run within a transaction that is, by default, automatically rolled back after completion of the test.
+ * * Use of @Transactional annotation causes the test to be run within a
+ * transaction that is, by default, automatically rolled back after completion
+ * of the test.
  */
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database

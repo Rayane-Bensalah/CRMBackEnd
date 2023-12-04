@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.slack.CrmBackend.model.Channel;
 import com.slack.CrmBackend.model.Message;
@@ -18,12 +20,22 @@ import com.slack.CrmBackend.repository.ChannelRepository;
 import com.slack.CrmBackend.repository.MessageRepository;
 import com.slack.CrmBackend.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 /**
  * Tests for Model Relations
  * tested save() and findAll()
  */
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database
-@DataJpaTest
+/**
+ * Tests for Model Relations
+ * Use of @Transactional annotation causes the test to be run within a
+ * transaction that is, by default, automatically rolled back after completion
+ * of the test.
+ */
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@SpringBootTest
+@Transactional
 class ModelRelationsTests {
 
     @Autowired
@@ -53,6 +65,9 @@ class ModelRelationsTests {
         userRepository.save(user1);
         userRepository.save(user2);
 
+        logger.info("######1######## [User1] : " + user1.getId() + " ###############");
+        logger.info("######1######## [User2] : " + user2.getId() + " ###############");
+
         /**
          * Create Main Channel
          */
@@ -72,6 +87,8 @@ class ModelRelationsTests {
         /**
          * Check User 1
          */
+        logger.info("######2######## [User1] : " + user1.getId() + " ###############");
+        logger.info("######2######## [User2] : " + user2.getId() + " ###############");
         Assertions.assertThat(user1).isNotNull();
         Assertions.assertThat(user1.getId()).isEqualTo(1);
 
