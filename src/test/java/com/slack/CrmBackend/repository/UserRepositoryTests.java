@@ -24,21 +24,6 @@ class UserRepositoryTests {
     UserRepository userRepository;
 
     /**
-     * test save()
-     */
-    @Test
-    void UserRepository_SaveUser() {
-
-        // Create test user and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userRepository.save(testUser);
-
-        // Assert user is created and with correct id
-        Assertions.assertThat(testUser).isNotNull();
-        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
-    }
-
-    /**
      * test findAll()
      */
     @Test
@@ -56,6 +41,21 @@ class UserRepositoryTests {
         // Assert both users are created and saved
         Assertions.assertThat(userList).isNotNull();
         Assertions.assertThat(userList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test save()
+     */
+    @Test
+    void UserRepository_SaveUser() {
+
+        // Create test user and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Assert user is created and with correct id
+        Assertions.assertThat(testUser).isNotNull();
+        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
     }
 
     /**

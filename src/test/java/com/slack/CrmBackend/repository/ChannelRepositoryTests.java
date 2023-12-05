@@ -23,21 +23,6 @@ class ChannelRepositoryTests {
     ChannelRepository ChannelRepository;
 
     /**
-     * test save()
-     */
-    @Test
-    void ChannelRepository_SaveChannel() {
-
-        // Create test Channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        ChannelRepository.save(testChannel);
-
-        // Assert Channel is created and with correct id
-        Assertions.assertThat(testChannel).isNotNull();
-        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
-    }
-
-    /**
      * test finAll()
      */
     @Test
@@ -55,6 +40,21 @@ class ChannelRepositoryTests {
         // Assert both Channels are created and saved
         Assertions.assertThat(ChannelList).isNotNull();
         Assertions.assertThat(ChannelList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test save()
+     */
+    @Test
+    void ChannelRepository_SaveChannel() {
+
+        // Create test Channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        ChannelRepository.save(testChannel);
+
+        // Assert Channel is created and with correct id
+        Assertions.assertThat(testChannel).isNotNull();
+        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
     }
 
     /**

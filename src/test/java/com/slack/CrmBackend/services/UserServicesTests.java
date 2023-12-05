@@ -3,7 +3,8 @@ package com.slack.CrmBackend.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -31,21 +32,6 @@ class UserServicesTests {
     UserService userService = Mockito.mock(UserService.class);
 
     /**
-     * test createUser()
-     */
-    @Test
-    void UserService_CreateUser() {
-
-        // Create test User and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userService.createUser(testUser);
-
-        // Assert User is created and with correct id
-        Assertions.assertThat(testUser).isNotNull();
-        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
-    }
-
-    /**
      * test getAllUser()
      */
     @Test
@@ -59,7 +45,7 @@ class UserServicesTests {
         userService.createUser(testUser2);
 
         // Get all Users
-        List<User> UserList = userService.getAllUser();
+        List<User> UserList = userService.getAllUsers();
 
         // Assert both Users are created and saved
         Assertions.assertThat(UserList).isNotNull();
@@ -83,6 +69,21 @@ class UserServicesTests {
         Assertions.assertThat(foundUser).isNotNull();
         Assertions.assertThat(foundUser).isPresent();
         Assertions.assertThat(foundUser.get().getFirstName()).isEqualTo(testUser1.getFirstName());
+    }
+
+    /**
+     * test createUser()
+     */
+    @Test
+    void UserService_CreateUser() {
+
+        // Create test User and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userService.createUser(testUser);
+
+        // Assert User is created and with correct id
+        Assertions.assertThat(testUser).isNotNull();
+        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
     }
 
     /**

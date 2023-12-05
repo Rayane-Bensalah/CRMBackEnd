@@ -15,7 +15,7 @@ public class MessageService {
   /**
    * @return all Message found
    */
-  public List<Message> getAllmessage() {
+  public List<Message> getAllMessages() {
     return mRepository.findAll();
   }
 
@@ -23,7 +23,7 @@ public class MessageService {
    * @param id id of Message to find
    * @return Message found
    */
-  public Optional<Message> getmessageById(Integer id) {
+  public Optional<Message> getMessageById(Integer id) {
     return mRepository.findById(id);
   }
 
@@ -31,7 +31,7 @@ public class MessageService {
    * @param nMessage new message to create
    * @return Message saved
    */
-  public Message createmessage(Message nMessage) {
+  public Message createMessage(Message nMessage) {
     return mRepository.save(nMessage);
   }
 
@@ -41,7 +41,7 @@ public class MessageService {
    * @param updateMessage Data of message uupdated
    * @return saved Message or null
    */
-  public Message updatemessage(Integer messageId, Message updateMessage) {
+  public Message updateMessage(Integer messageId, Message updateMessage) {
     Optional<Message> eMessage = mRepository.findById(messageId);
     if (eMessage.isPresent()) {
       updateMessage.setId(messageId);

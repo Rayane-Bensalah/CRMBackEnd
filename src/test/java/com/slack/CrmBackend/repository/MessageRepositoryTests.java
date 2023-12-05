@@ -31,26 +31,6 @@ class MessageRepositoryTests {
     ChannelRepository channelRepository;
 
     @Test
-    void MessageRepository_SaveMessage() {
-
-        // Create test user and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userRepository.save(testUser);
-
-        // Create test channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        channelRepository.save(testChannel);
-
-        // Create test message with user and channel created before
-        Message testMessage = new Message("testContent", testUser, testChannel);
-        messageRepository.save(testMessage);
-
-        // Assert Message is created and with correct id
-        Assertions.assertThat(testMessage).isNotNull();
-        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
-    }
-
-    @Test
     public void MessageRepository_GetAllMessages() {
         // Create and save user & channel
 
@@ -72,6 +52,26 @@ class MessageRepositoryTests {
         // Assert both Messages are created and saved
         Assertions.assertThat(MessageList).isNotNull();
         Assertions.assertThat(MessageList.size()).isEqualTo(2);
+    }
+
+    @Test
+    void MessageRepository_SaveMessage() {
+
+        // Create test user and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Create test channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        channelRepository.save(testChannel);
+
+        // Create test message with user and channel created before
+        Message testMessage = new Message("testContent", testUser, testChannel);
+        messageRepository.save(testMessage);
+
+        // Assert Message is created and with correct id
+        Assertions.assertThat(testMessage).isNotNull();
+        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
     }
 
     /**

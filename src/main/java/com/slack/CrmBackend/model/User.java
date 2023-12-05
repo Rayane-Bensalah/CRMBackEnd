@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,14 +37,15 @@ public class User {
   private String email;
 
   @Column(name = "created_at")
-  private LocalDateTime createdAt;
+  private LocalDateTime createdAt = LocalDateTime.now();
 
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
   /** User messages */
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<Message> messages = new ArrayList<Message>();
+  @JsonIgnoreProperties("user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Message> messages = new ArrayList<>();
 
   public User() {
   }
@@ -58,7 +61,6 @@ public class User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.createdAt = LocalDateTime.now();
   }
 
   public Integer getId() {

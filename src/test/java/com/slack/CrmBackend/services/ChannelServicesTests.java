@@ -27,21 +27,6 @@ class ChannelServicesTests {
     ChannelService channelService = Mockito.mock(ChannelService.class);
 
     /**
-     * test createChannel()
-     */
-    @Test
-    void ChannelService_CreateChannel() {
-
-        // Create test Channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        channelService.createChannel(testChannel);
-
-        // Assert Channel is created and with correct id
-        Assertions.assertThat(testChannel).isNotNull();
-        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
-    }
-
-    /**
      * test getAllChannel()
      */
     @Test
@@ -54,7 +39,7 @@ class ChannelServicesTests {
         channelService.createChannel(testChannel2);
 
         // Get all Channels
-        List<Channel> ChannelList = channelService.getAllChannel();
+        List<Channel> ChannelList = channelService.getAllChannels();
 
         // Assert both Channels are created and saved
         Assertions.assertThat(ChannelList).isNotNull();
@@ -80,6 +65,21 @@ class ChannelServicesTests {
         Assertions.assertThat(foundChannel).isNotNull();
         Assertions.assertThat(foundChannel).isPresent();
         Assertions.assertThat(foundChannel.get().getName()).isEqualTo(testChannel1.getName());
+    }
+
+    /**
+     * test createChannel()
+     */
+    @Test
+    void ChannelService_CreateChannel() {
+
+        // Create test Channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        channelService.createChannel(testChannel);
+
+        // Assert Channel is created and with correct id
+        Assertions.assertThat(testChannel).isNotNull();
+        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
     }
 
     /**
