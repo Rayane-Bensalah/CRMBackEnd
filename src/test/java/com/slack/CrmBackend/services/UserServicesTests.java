@@ -1,5 +1,8 @@
 package com.slack.CrmBackend.services;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.model.User;
 import org.assertj.core.api.Assertions;
@@ -11,13 +14,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for UserServices
- * Use of @Transactional annotation causes the test to be run within a transaction that is, by default, automatically rolled back after completion of the test.
+ * Use of @Transactional annotation causes the test to be run within a
+ * transaction that is, by default, automatically rolled back after completion
+ * of the test.
  */
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database
