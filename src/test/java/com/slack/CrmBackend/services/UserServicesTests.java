@@ -1,6 +1,5 @@
 package com.slack.CrmBackend.services;
 
-import com.slack.CrmBackend.Service.ChannelService;
 import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.model.User;
 import org.assertj.core.api.Assertions;
@@ -9,7 +8,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,21 +28,6 @@ class UserServicesTests {
     UserService userService = Mockito.mock(UserService.class);
 
     /**
-     * test createUser()
-     */
-    @Test
-    void UserService_CreateUser() {
-
-        // Create test User and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userService.createUser(testUser);
-
-        // Assert User is created and with correct id
-        Assertions.assertThat(testUser).isNotNull();
-        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
-    }
-
-    /**
      * test getAllUser()
      */
     @Test
@@ -58,7 +41,7 @@ class UserServicesTests {
         userService.createUser(testUser2);
 
         // Get all Users
-        List<User> UserList = userService.getAllUser();
+        List<User> UserList = userService.getAllUsers();
 
         // Assert both Users are created and saved
         Assertions.assertThat(UserList).isNotNull();
@@ -78,12 +61,25 @@ class UserServicesTests {
         // Get one User
         Optional<User> foundUser = userService.getUserById(testUser1.getId());
 
-
-
         // Assert user is found and correct
         Assertions.assertThat(foundUser).isNotNull();
         Assertions.assertThat(foundUser).isPresent();
         Assertions.assertThat(foundUser.get().getFirstName()).isEqualTo(testUser1.getFirstName());
+    }
+
+    /**
+     * test createUser()
+     */
+    @Test
+    void UserService_CreateUser() {
+
+        // Create test User and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userService.createUser(testUser);
+
+        // Assert User is created and with correct id
+        Assertions.assertThat(testUser).isNotNull();
+        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
     }
 
     /**

@@ -16,7 +16,7 @@ public class ChannelService {
   /**
    * @return all Channel found
    */
-  public List<Channel> getAllChannel() {
+  public List<Channel> getAllChannels() {
     return uRepository.findAll();
   }
 
