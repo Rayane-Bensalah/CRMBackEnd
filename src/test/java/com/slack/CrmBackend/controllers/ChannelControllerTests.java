@@ -1,8 +1,18 @@
 package com.slack.CrmBackend.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slack.CrmBackend.model.Channel;
-import com.slack.CrmBackend.Service.ChannelService;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.slack.CrmBackend.Service.ChannelService;
+import com.slack.CrmBackend.model.Channel;
 
 /**
  * Tests for ChannelController
- * tested methods getAllChannels(), getChannelById(), addChannel(), putChannel() and deleteChannel(),
- * used Mockito with MockMvc to mock an API Call on the controller and check the excepted JSON result
+ * tested methods getAllChannels(), getChannelById(), addChannel(), putChannel()
+ * and deleteChannel(),
+ * used Mockito with MockMvc to mock an API Call on the controller and check the
+ * excepted JSON result
  */
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -44,7 +52,9 @@ class ChannelControllerTests {
     private ObjectMapper objectMapper;
 
     /**
-     * Test getAllChannels() : Verify that the getChannels correctly get all existing channels
+     * Test getAllChannels() : Verify that the getChannels correctly get all
+     * existing channels
+     * 
      * @throws Exception
      */
     @Test
@@ -54,7 +64,7 @@ class ChannelControllerTests {
         Channel channel2 = new Channel("testChannelName2", false);
         Mockito.when(channelService.getAllChannels()).thenReturn(Arrays.asList(channel1, channel2));
 
-        mockMvc.perform(get("/channel"))
+        mockMvc.perform(get("/channels"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
@@ -66,7 +76,9 @@ class ChannelControllerTests {
     }
 
     /**
-     * Test getChannelById() : Verify that the get with endpoint /channel/{id} correctly get an existing channel
+     * Test getChannelById() : Verify that the get with endpoint /channels/{id}
+     * correctly get an existing channel
+     * 
      * @throws Exception
      */
     @Test
@@ -75,7 +87,7 @@ class ChannelControllerTests {
         Channel channel = new Channel("testChannelname1", false);
         Mockito.when(channelService.getChannelById(1)).thenReturn(Optional.of(channel));
 
-        mockMvc.perform(get("/channel/1"))
+        mockMvc.perform(get("/channels/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("testChannelname1"))
@@ -84,6 +96,7 @@ class ChannelControllerTests {
 
     /**
      * Test addChannel() : Verify that the add correctly create a new channel
+     * 
      * @throws Exception
      */
     @Test
@@ -91,9 +104,9 @@ class ChannelControllerTests {
         Channel channel = new Channel("testChannelname1", false);
         Mockito.when(channelService.createChannel(any(Channel.class))).thenReturn(channel);
 
-        mockMvc.perform(post("/channel")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(channel)))
+        mockMvc.perform(post("/channels")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(channel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("testChannelname1"))
@@ -101,7 +114,9 @@ class ChannelControllerTests {
     }
 
     /**
-     * Test putChannel() : Verify that the put with endpoint /channel/{id} correctly update an existing channel
+     * Test putChannel() : Verify that the put with endpoint /channels/{id}
+     * correctly update an existing channel
+     * 
      * @throws Exception
      */
     @Test
@@ -114,11 +129,16 @@ class ChannelControllerTests {
 
         // Mocking the service behavior
         Mockito.when(channelService.getChannelById(1)).thenReturn(Optional.of(existingChannel));
-        Mockito.when(channelService.updateChannel(eq(1), any(Channel.class))).thenReturn(existingChannel); // Returning the existing channel after update
+        Mockito.when(channelService.updateChannel(eq(1), any(Channel.class))).thenReturn(existingChannel); // Returning
+                                                                                                           // the
+                                                                                                           // existing
+                                                                                                           // channel
+                                                                                                           // after
+                                                                                                           // update
 
-        mockMvc.perform(put("/channel/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedChannel)))
+        mockMvc.perform(put("/channels/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedChannel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("testChannelname1"))
@@ -126,7 +146,9 @@ class ChannelControllerTests {
     }
 
     /**
-     * Test deleteChannel() : Verify that the delete with endpoint /channel/{id} correctly delete an existing channel
+     * Test deleteChannel() : Verify that the delete with endpoint /channels/{id}
+     * correctly delete an existing channel
+     * 
      * @throws Exception
      */
     @Test
@@ -134,7 +156,7 @@ class ChannelControllerTests {
         Channel channelToDelete = new Channel("testChannelname1", false);
         channelToDelete.setId(1);
 
-        mockMvc.perform(delete("/channel/1"))
+        mockMvc.perform(delete("/channels/1"))
                 .andExpect(status().isNotFound());
     }
 }

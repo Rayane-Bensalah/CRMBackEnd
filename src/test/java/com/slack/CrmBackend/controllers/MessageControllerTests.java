@@ -79,7 +79,7 @@ class MessageControllerTests {
         Message message2 = new Message("Test content 2", testUser2, testChannel2);
         Mockito.when(messageService.getAllMessages()).thenReturn(Arrays.asList(message1, message2));
 
-        mockMvc.perform(get("/message"))
+        mockMvc.perform(get("/messages"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
@@ -88,7 +88,7 @@ class MessageControllerTests {
     }
 
     /**
-     * Test getMessageById() : Verify that the get with endpoint /message/{id} correctly get an existing message
+     * Test getMessageById() : Verify that the get with endpoint /messages/{id} correctly get an existing message
      * @throws Exception
      */
     @Test
@@ -102,7 +102,7 @@ class MessageControllerTests {
         Message message = new Message("Test content", testUser, testChannel);
         Mockito.when(messageService.getMessageById(1)).thenReturn(Optional.of(message));
 
-        mockMvc.perform(get("/message/1"))
+        mockMvc.perform(get("/messages/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").value("Test content"));
@@ -123,7 +123,7 @@ class MessageControllerTests {
         Message message = new Message("Test content", testUser, testChannel);
         Mockito.when(messageService.createMessage(any(Message.class))).thenReturn(message);
 
-        mockMvc.perform(post("/message")
+        mockMvc.perform(post("/messages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(message)))
                 .andExpect(status().isOk())
@@ -132,7 +132,7 @@ class MessageControllerTests {
     }
 
     /**
-     * Test putMessage() : Verify that the put with endpoint /message/{id} correctly update an existing message
+     * Test putMessage() : Verify that the put with endpoint /messages/{id} correctly update an existing message
      * @throws Exception
      */
     @Test
@@ -153,7 +153,7 @@ class MessageControllerTests {
         Mockito.when(messageService.getMessageById(1)).thenReturn(Optional.of(existingMessage));
         Mockito.when(messageService.updateMessage(eq(1), any(Message.class))).thenReturn(existingMessage); // Returning the existing message after update
 
-        mockMvc.perform(put("/message/1")
+        mockMvc.perform(put("/messages/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedMessage)))
                 .andExpect(status().isOk())
@@ -162,7 +162,7 @@ class MessageControllerTests {
     }
 
     /**
-     * Test deleteMessage() : Verify that the delete with endpoint /message/{id} correctly delete an existing message
+     * Test deleteMessage() : Verify that the delete with endpoint /messages/{id} correctly delete an existing message
      * @throws Exception
      */
     @Test
@@ -176,7 +176,7 @@ class MessageControllerTests {
         Message messageToDelete = new Message("Test content", testUser, testChannel);
         messageToDelete.setId(1);
 
-        mockMvc.perform(delete("/message/1"))
+        mockMvc.perform(delete("/messages/1"))
                 .andExpect(status().isNotFound());
     }
 }

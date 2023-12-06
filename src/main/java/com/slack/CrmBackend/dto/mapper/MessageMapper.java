@@ -3,6 +3,7 @@ package com.slack.CrmBackend.dto.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
@@ -21,8 +22,8 @@ public interface MessageMapper {
     MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     /**
-     * @param Message message
-     * @return MessageDto
+     * @param message
+     * @return messageDto
      */
     // @Mapping(target = "channel", ignore = true)
     // @Mapping(target = "user", ignore = true)
@@ -31,10 +32,20 @@ public interface MessageMapper {
     /**
      * Convert Message List to Message DTO List
      * 
-     * @param Message List
-     * @return MessageDto List
+     * @param messages
+     * @return messagesDto
      */
     // @Mapping(target = "channel", ignore = false)
     // @Mapping(target = "user", ignore = false)
     List<MessageDto> messagesToDto(List<Message> messages);
+
+    /**
+     * Convert MessageDto to Message
+     * 
+     * @param messageDto
+     * @return message
+     */
+    @Mapping(target = "channel", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    Message messageDtoToMessage(MessageDto messageDto);
 }

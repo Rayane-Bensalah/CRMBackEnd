@@ -19,7 +19,6 @@ import jakarta.transaction.Transactional;
 
 /**
  * Tests for User Dto
- * tested save() and findAll()
  */
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @SpringBootTest

@@ -3,6 +3,7 @@ package com.slack.CrmBackend.dto.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
@@ -24,24 +25,33 @@ public interface UserMapper {
     /**
      * Convert User entity to User DTO
      *
-     * @param User user
-     * @return UserDto
+     * @param user
+     * @return userDto
      */
     UserDto userToDto(User user);
 
     /**
      * Convert User entity to User DTO Slim
      *
-     * @param User user
-     * @return UserDtoSlim
+     * @param user
+     * @return userDtoSlim
      */
     UserDtoSlim userToSlimDto(User user);
 
     /**
      * Convert Users List to Users DTO List
      * 
-     * @param Users List
-     * @return UserDto List
+     * @param users
+     * @return userDto List
      */
     List<UserDto> usersToUsersDto(List<User> users);
+
+    /**
+     * Convert UserDto to User
+     * 
+     * @param userDto
+     * @return user
+     */
+    @Mapping(target = "messages", ignore = true)
+    User userDtoToUser(UserDto userDto);
 }

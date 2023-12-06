@@ -23,16 +23,15 @@ public interface ChannelMapper {
     ChannelMapper INSTANCE = Mappers.getMapper(ChannelMapper.class);
 
     /**
-     * @param Channel channel
-     * @return ChannelDto
+     * @param channel
+     * @return channelDto
      */
-    @Mapping(target = "messages", ignore = true)
     ChannelDto channelToDto(Channel channel);
 
     /**
      * Convert Channel entity to Channel DTO Slim
      *
-     * @param Channel channel
+     * @param channel
      * @return ChannelDtoSlim
      */
     ChannelDtoSlim channelToSlimDto(Channel channel);
@@ -40,9 +39,17 @@ public interface ChannelMapper {
     /**
      * Convert Channels List to Channels DTO List
      * 
-     * @param Channels List
-     * @return ChannelDto List
+     * @param channels
+     * @return channelsDto
      */
-    // @Mapping(target = "messages", ignore = true)
     List<ChannelDto> channelsToDto(List<Channel> channels);
+
+    /**
+     * Convert ChannelDto to Channel
+     * 
+     * @param channelDto
+     * @return channel
+     */
+    @Mapping(target = "messages", ignore = true)
+    Channel channelDtoToChannel(ChannelDto channelDto);
 }
