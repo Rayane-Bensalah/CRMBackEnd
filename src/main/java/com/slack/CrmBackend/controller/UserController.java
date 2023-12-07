@@ -1,21 +1,34 @@
 package com.slack.CrmBackend.controller;
 
-import com.slack.CrmBackend.Service.UserService;
-import com.slack.CrmBackend.model.User;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.dto.UserDto;
+import com.slack.CrmBackend.dto.mapper.UserMapper;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Controller for User Entities, manages REST API
  * Utilizes Spring annotations for request mappings and dependency injection.
- * Provides CRUD operations: get all, get one, adding, updating, and deleting users.
+ * Provides CRUD operations: get all, get one, adding, updating, and deleting
+ * users.
  */
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
 
     /**
@@ -25,12 +38,19 @@ public class UserController {
     UserService userService;
 
     /**
+     * Autowiring UserMapper for transferring data between services
+     */
+    @Autowired
+    UserMapper userMapper;
+
+    /**
      * Endpoint to retrieve all users.
+     * 
      * @return List<Users>
      */
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userMapper.usersToUsersDto(userService.getAllUsers());
     }
 
     /**
@@ -38,15 +58,16 @@ public class UserController {
      * Use Optional to handle the possibility of a null result.
      * Return a response with the user if it exists.
      * Return a not found response if the user doesn't exist.
-     * @param Integer id
+     * 
+     * @param @PathVariable Integer id
      * @return ResponseEntity(User)
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Integer id) {
         Optional<User> optional = userService.getUserById(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             User user = optional.get();
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(userMapper.userToDto(user));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -56,14 +77,15 @@ public class UserController {
      * Endpoint to add a new user.
      * Call the service to create a new user.
      * Return a response with the created user.
-     * @param User newUser
+     * 
+     * @param @RequestBody UserDto
      * @return ResponseEntity(User newUser)
      */
     @PostMapping
-    @ResponseStatus( HttpStatus.CREATED )
-    public ResponseEntity<User> addUser(@RequestBody User newUser){
-        userService.createUser(newUser);
-        return ResponseEntity.ok(newUser);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
+        User user = userService.createUser(userMapper.userDtoToUser(userDto));
+        return ResponseEntity.ok(userMapper.userToDto(user));
     }
 
     /**
@@ -72,18 +94,19 @@ public class UserController {
      * Set the ID and call the service to update the user.
      * Return a response with the updated user.
      * Return a not found response if the user doesn't exist.
-     * @param Integer id
-     * @param User user
-     * @return ResponseEntity(User updatedUser)
+     * 
+     * @param @PathVariable Integer id
+     * @param @RequestBody  UserDto userDto
+     * @return ResponseEntity(UserDto)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> putUser(@PathVariable Integer id, @RequestBody User user) {
+    public ResponseEntity<UserDto> putUser(@PathVariable Integer id, @RequestBody UserDto userDto) {
         Optional<User> existingUser = userService.getUserById(id);
 
         if (existingUser.isPresent()) {
-            user.setId(id);
-            User updatedUser = userService.updateUser(id, user);
-            return ResponseEntity.ok(updatedUser);
+            userDto.setId(id);
+            User updatedUser = userService.updateUser(id, userMapper.userDtoToUser(userDto));
+            return ResponseEntity.ok(userMapper.userToDto(updatedUser));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -95,16 +118,16 @@ public class UserController {
      * Return a not found response if the user doesn't exist.
      * Call the service to delete the user.
      * Return a response indicating successful deletion.
-     * @param Integer id
+     * 
+     * @param @PathVariable Integer id
      * @return ResponseEntity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") Integer id){
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
         Optional<User> optional = userService.getUserById(id);
-        if(optional.isEmpty()){
+        if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
-        }
-        else {
+        } else {
             userService.deleteUser(id);
             return ResponseEntity.ok().build();
         }

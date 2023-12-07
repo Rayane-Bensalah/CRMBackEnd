@@ -16,6 +16,5 @@ public class ChannelDto {
     private Integer id;
     private String name;
     private boolean isMain;
-    private MessageDto messages;
     private LocalDateTime createdAt;
 }

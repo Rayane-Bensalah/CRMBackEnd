@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 /** Channel */
@@ -117,5 +118,14 @@ public class Channel {
    */
   public void setMessages(List<Message> messages) {
     this.messages = messages;
+  }
+
+  /**
+   * Pre Persist attributs
+   * Set default values on entity creation
+   */
+  @PrePersist
+  public void onCreate() {
+    this.setCreatedAt(LocalDateTime.now());
   }
 }

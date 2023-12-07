@@ -1,8 +1,18 @@
 package com.slack.CrmBackend.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slack.CrmBackend.model.User;
-import com.slack.CrmBackend.Service.UserService;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for UserController
- * tested methods getAllUsers(), getUserById(), addUser(), putUser() and deleteUser(),
- * used Mockito with MockMvc to mock an API Call on the controller and check the excepted JSON result
+ * tested methods getAllUsers(), getUserById(), addUser(), putUser() and
+ * deleteUser(),
+ * used Mockito with MockMvc to mock an API Call on the controller and check the
+ * excepted JSON result
  */
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -45,6 +53,7 @@ class UserControllerTests {
 
     /**
      * Test getAllUsers() : Verify that the get correctly get all existing users
+     * 
      * @throws Exception
      */
     @Test
@@ -54,7 +63,7 @@ class UserControllerTests {
         User user2 = new User("testUserName2", "testFirstName2", "testLastName2", "test@email2.com");
         Mockito.when(userService.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
 
-        mockMvc.perform(get("/user"))
+        mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
@@ -70,7 +79,9 @@ class UserControllerTests {
     }
 
     /**
-     * Test getUserById() : Verify that the get with endpoint /user/{id} correctly get an existing user
+     * Test getUserById() : Verify that the get with endpoint /users/{id} correctly
+     * get an existing user
+     * 
      * @throws Exception
      */
     @Test
@@ -79,7 +90,7 @@ class UserControllerTests {
         User user = new User("testUserName", "testFirstName", "testLastName", "test@email.com");
         Mockito.when(userService.getUserById(1)).thenReturn(Optional.of(user));
 
-        mockMvc.perform(get("/user/1"))
+        mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userName").value("testUserName"))
@@ -90,6 +101,7 @@ class UserControllerTests {
 
     /**
      * Test addUser() : Verify that the add correctly create a new user
+     * 
      * @throws Exception
      */
     @Test
@@ -97,9 +109,9 @@ class UserControllerTests {
         User user = new User("testUserName", "testFirstName", "testLastName", "test@email.com");
         Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
 
-        mockMvc.perform(post("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userName").value("testUserName"))
@@ -109,7 +121,9 @@ class UserControllerTests {
     }
 
     /**
-     * Test putUser() : Verify that the put with endpoint /user/{id} correctly update an existing user
+     * Test putUser() : Verify that the put with endpoint /users/{id} correctly
+     * update an existing user
+     * 
      * @throws Exception
      */
     @Test
@@ -122,11 +136,12 @@ class UserControllerTests {
 
         // Mocking the service behavior
         Mockito.when(userService.getUserById(1)).thenReturn(Optional.of(existingUser));
-        Mockito.when(userService.updateUser(eq(1), any(User.class))).thenReturn(existingUser); // Returning the existing user after update
+        Mockito.when(userService.updateUser(eq(1), any(User.class))).thenReturn(existingUser); // Returning the existing
+                                                                                               // user after update
 
-        mockMvc.perform(put("/user/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedUser)))
+        mockMvc.perform(put("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedUser)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userName").value("existingUser")) // Checking the existing user's fields
@@ -136,7 +151,10 @@ class UserControllerTests {
     }
 
     /**
-    * Test deleteUser() : Verify that the delete with endpoint /user/{id} correctly delete an existing user
+     * Test deleteUser() : Verify that the delete with endpoint /users/{id}
+     * correctly
+     * delete an existing user
+     * 
      * @throws Exception
      */
     @Test
@@ -144,7 +162,7 @@ class UserControllerTests {
         User userToDelete = new User("testUserName1", "testFirstName1", "testLastName1", "test@email1.com");
         userToDelete.setId(1);
 
-        mockMvc.perform(delete("/user/1"))
+        mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isNotFound());
     }
 }
