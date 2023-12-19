@@ -1,4 +1,4 @@
-package com.example.CrmBackend.repository;
+package com.slack.CrmBackend.repository;
 
 import java.util.List;
 
@@ -9,7 +9,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.CrmBackend.model.Channel;
+
+import com.slack.CrmBackend.model.Channel;
 
 /**
  * Tests for ChannelRepository
@@ -21,21 +22,6 @@ class ChannelRepositoryTests {
 
     @Autowired
     ChannelRepository ChannelRepository;
-
-    /**
-     * test save()
-     */
-    @Test
-    void ChannelRepository_SaveChannel() {
-
-        // Create test Channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        ChannelRepository.save(testChannel);
-
-        // Assert Channel is created and with correct id
-        Assertions.assertThat(testChannel).isNotNull();
-        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
-    }
 
     /**
      * test finAll()
@@ -55,6 +41,21 @@ class ChannelRepositoryTests {
         // Assert both Channels are created and saved
         Assertions.assertThat(ChannelList).isNotNull();
         Assertions.assertThat(ChannelList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test save()
+     */
+    @Test
+    void ChannelRepository_SaveChannel() {
+
+        // Create test Channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        ChannelRepository.save(testChannel);
+
+        // Assert Channel is created and with correct id
+        Assertions.assertThat(testChannel).isNotNull();
+        Assertions.assertThat(testChannel.getId()).isGreaterThan(0);
     }
 
     /**

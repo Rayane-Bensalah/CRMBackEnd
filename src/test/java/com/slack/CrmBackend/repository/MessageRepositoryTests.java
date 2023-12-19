@@ -1,4 +1,4 @@
-package com.example.CrmBackend.repository;
+package com.slack.CrmBackend.repository;
 
 import java.util.List;
 
@@ -9,9 +9,10 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.CrmBackend.model.Channel;
-import com.example.CrmBackend.model.Message;
-import com.example.CrmBackend.model.User;
+
+import com.slack.CrmBackend.model.Channel;
+import com.slack.CrmBackend.model.Message;
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for MessageRepository
@@ -29,26 +30,6 @@ class MessageRepositoryTests {
 
     @Autowired
     ChannelRepository channelRepository;
-
-    @Test
-    void MessageRepository_SaveMessage() {
-
-        // Create test user and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userRepository.save(testUser);
-
-        // Create test channel and save it
-        Channel testChannel = new Channel("testChannelname", false);
-        channelRepository.save(testChannel);
-
-        // Create test message with user and channel created before
-        Message testMessage = new Message("testContent", testUser, testChannel);
-        messageRepository.save(testMessage);
-
-        // Assert Message is created and with correct id
-        Assertions.assertThat(testMessage).isNotNull();
-        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
-    }
 
     @Test
     public void MessageRepository_GetAllMessages() {
@@ -72,6 +53,26 @@ class MessageRepositoryTests {
         // Assert both Messages are created and saved
         Assertions.assertThat(MessageList).isNotNull();
         Assertions.assertThat(MessageList.size()).isEqualTo(2);
+    }
+
+    @Test
+    void MessageRepository_SaveMessage() {
+
+        // Create test user and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Create test channel and save it
+        Channel testChannel = new Channel("testChannelname", false);
+        channelRepository.save(testChannel);
+
+        // Create test message with user and channel created before
+        Message testMessage = new Message("testContent", testUser, testChannel);
+        messageRepository.save(testMessage);
+
+        // Assert Message is created and with correct id
+        Assertions.assertThat(testMessage).isNotNull();
+        Assertions.assertThat(testMessage.getId()).isGreaterThan(0);
     }
 
     /**

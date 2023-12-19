@@ -1,7 +1,8 @@
-package com.example.CrmBackend.repository;
+package com.slack.CrmBackend.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.example.CrmBackend.model.User;
+
+import com.slack.CrmBackend.model.User;
 
 /**
  * Tests for UserRepository
@@ -22,21 +24,6 @@ class UserRepositoryTests {
 
     @Autowired
     UserRepository userRepository;
-
-    /**
-     * test save()
-     */
-    @Test
-    void UserRepository_SaveUser() {
-
-        // Create test user and save it
-        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
-        userRepository.save(testUser);
-
-        // Assert user is created and with correct id
-        Assertions.assertThat(testUser).isNotNull();
-        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
-    }
 
     /**
      * test findAll()
@@ -56,6 +43,21 @@ class UserRepositoryTests {
         // Assert both users are created and saved
         Assertions.assertThat(userList).isNotNull();
         Assertions.assertThat(userList.size()).isEqualTo(2);
+    }
+
+    /**
+     * test save()
+     */
+    @Test
+    void UserRepository_SaveUser() {
+
+        // Create test user and save it
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userRepository.save(testUser);
+
+        // Assert user is created and with correct id
+        Assertions.assertThat(testUser).isNotNull();
+        Assertions.assertThat(testUser.getId()).isGreaterThan(0);
     }
 
     /**

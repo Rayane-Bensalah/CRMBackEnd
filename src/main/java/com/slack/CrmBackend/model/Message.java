@@ -1,4 +1,4 @@
-package com.example.CrmBackend.model;
+package com.slack.CrmBackend.model;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 /** Message */
@@ -51,7 +52,6 @@ public class Message {
     this.content = content;
     this.user = user;
     this.channel = channel;
-    this.sendDate = LocalDateTime.now();
   }
 
   /**
@@ -123,4 +123,14 @@ public class Message {
   public void setSendDate(LocalDateTime sendDate) {
     this.sendDate = sendDate;
   }
+
+  /**
+   * Pre Persist attributs
+   * Set default values on entity creation
+   */
+  @PrePersist
+  public void onCreate() {
+    this.setSendDate(LocalDateTime.now());
+  }
+
 }
