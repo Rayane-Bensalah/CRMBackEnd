@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.slack.CrmBackend.dto.ChannelDto;
 import com.slack.CrmBackend.dto.ChannelDtoSlim;
+import com.slack.CrmBackend.dto.ChannelPostResquestDto;
 import com.slack.CrmBackend.model.Channel;
 
 /**
@@ -53,4 +54,16 @@ public interface ChannelMapper {
      */
     @Mapping(target = "messages", ignore = true)
     Channel channelDtoToChannel(ChannelDto channelDto);
+
+    /**
+     * Convert ChannelPostResquestDto to Channel
+     * 
+     * @param channelDto
+     * @return channel
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "main", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "messages", ignore = true)
+    Channel channelPostResquestDtoToChannel(ChannelPostResquestDto channelPostResquestDto);
 }

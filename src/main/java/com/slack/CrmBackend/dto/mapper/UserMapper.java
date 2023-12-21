@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.slack.CrmBackend.dto.UserDto;
 import com.slack.CrmBackend.dto.UserDtoSlim;
+import com.slack.CrmBackend.dto.UserPostResquestDto;
 import com.slack.CrmBackend.model.User;
 
 /**
@@ -55,4 +56,19 @@ public interface UserMapper {
      */
     @Mapping(target = "messages", ignore = true)
     User userDtoToUser(UserDto userDto);
+
+    /**
+     * Convert UserPostResquestDto to User
+     * 
+     * @param UserPostResquestDto userPostResquestDto
+     * @return User
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
+    @Mapping(target = "lastName", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "messages", ignore = true)
+    User userPostResquestDtoToUser(UserPostResquestDto userPostResquestDto);
 }
