@@ -1,17 +1,20 @@
 package com.slack.CrmBackend.Service;
 
-import com.slack.CrmBackend.model.User;
-import com.slack.CrmBackend.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.slack.CrmBackend.model.User;
+import com.slack.CrmBackend.repository.UserRepository;
 
 /** UserService */
 @Service
 public class UserService {
 
-  @Autowired UserRepository uRepository;
+  @Autowired
+  UserRepository uRepository;
 
   /**
    * @return all User found
@@ -37,18 +40,11 @@ public class UserService {
   }
 
   /**
-   * @param userId id of user to update
    * @param updateUser Data of user uupdated
    * @return saved user or null
    */
-  public User updateUser(Integer userId, User updateUser) {
-    Optional<User> eUser = uRepository.findById(userId);
-    if (eUser.isPresent()) {
-      updateUser.setId(userId);
-      return uRepository.save(updateUser);
-    } else {
-      return null;
-    }
+  public User updateUser(User updateUser) {
+    return uRepository.save(updateUser);
   }
 
   /**
