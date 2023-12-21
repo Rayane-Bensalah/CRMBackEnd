@@ -124,7 +124,7 @@ class ChannelControllerTests {
         Channel existingChannel = new Channel("testChannelname1", false);
         channelService.createChannel(existingChannel);
 
-        Channel updatedChannel = new Channel("testChannelname1", false);
+        Channel updatedChannel = new Channel("updatedChannelname1", false);
 
         // Mocking the service behavior
         Mockito.when(channelService.getChannelById(1)).thenReturn(Optional.of(existingChannel));
@@ -140,7 +140,7 @@ class ChannelControllerTests {
                 .content(objectMapper.writeValueAsString(updatedChannel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("testChannelname1"))
+                .andExpect(jsonPath("$.name").value("updatedChannelname1"))
                 .andExpect(jsonPath("$.main").value("false"));
     }
 

@@ -143,10 +143,10 @@ class UserControllerTests {
                 .content(objectMapper.writeValueAsString(updatedUser)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.userName").value("existingUser")) // Checking the existing user's fields
-                .andExpect(jsonPath("$.firstName").value("Existing"))
+                .andExpect(jsonPath("$.userName").value("updatedUser")) // Checking the existing user's fields
+                .andExpect(jsonPath("$.firstName").value("Updated"))
                 .andExpect(jsonPath("$.lastName").value("User"))
-                .andExpect(jsonPath("$.email").value("existing@email.com"));
+                .andExpect(jsonPath("$.email").value("updated@email.com"));
     }
 
     /**
