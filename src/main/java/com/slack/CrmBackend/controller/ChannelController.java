@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.slack.CrmBackend.Service.ChannelService;
 import com.slack.CrmBackend.dto.ChannelDto;
+import com.slack.CrmBackend.dto.ChannelPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.ChannelMapper;
 import com.slack.CrmBackend.model.Channel;
 
@@ -87,8 +88,9 @@ public class ChannelController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ChannelDto> addChannel(@RequestBody ChannelDto channelDto) {
-        Channel channel = channelService.createChannel(channelMapper.channelDtoToChannel(channelDto));
+    public ResponseEntity<ChannelDto> addChannel(@RequestBody ChannelPostResquestDto channelPostResquestDto) {
+        Channel channel = channelService
+                .createChannel(channelMapper.channelPostResquestDtoToChannel(channelPostResquestDto));
         return ResponseEntity.ok(channelMapper.channelToDto(channel));
     }
 

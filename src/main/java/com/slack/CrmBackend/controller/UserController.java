@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.dto.UserDto;
+import com.slack.CrmBackend.dto.UserPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.UserMapper;
 import com.slack.CrmBackend.model.User;
 
@@ -83,8 +84,8 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        User user = userService.createUser(userMapper.userDtoToUser(userDto));
+    public ResponseEntity<UserDto> addUser(@RequestBody UserPostResquestDto userPostResquestDto) {
+        User user = userService.createUser(userMapper.userPostResquestDtoToUser(userPostResquestDto));
         return ResponseEntity.ok(userMapper.userToDto(user));
     }
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.slack.CrmBackend.Service.MessageService;
 import com.slack.CrmBackend.dto.MessageDto;
+import com.slack.CrmBackend.dto.MessagePostResquestDto;
 import com.slack.CrmBackend.dto.mapper.MessageMapper;
 import com.slack.CrmBackend.model.Message;
 
@@ -84,8 +85,8 @@ public class MessageController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MessageDto> addMessage(@RequestBody MessageDto messageDto) {
-        Message message = messageService.createMessage(messageMapper.messageDtoToMessage(messageDto));
+    public ResponseEntity<MessageDto> addMessage(@RequestBody MessagePostResquestDto messagePostResquestDto) {
+        Message message = messageService.createMessage(messageMapper.messagePostResquestDtoToMessage(messagePostResquestDto));
         return ResponseEntity.ok(messageMapper.messageToDto(message));
     }
 
