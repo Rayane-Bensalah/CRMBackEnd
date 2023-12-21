@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.slack.CrmBackend.Service.ChannelService;
 import com.slack.CrmBackend.dto.ChannelDto;
+import com.slack.CrmBackend.dto.ChannelPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.ChannelMapper;
 import com.slack.CrmBackend.model.Channel;
 
@@ -29,7 +29,6 @@ import com.slack.CrmBackend.model.Channel;
  * channels.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("channels")
 public class ChannelController {
 
@@ -89,8 +88,9 @@ public class ChannelController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ChannelDto> addChannel(@RequestBody ChannelDto channelDto) {
-        Channel channel = channelService.createChannel(channelMapper.channelDtoToChannel(channelDto));
+    public ResponseEntity<ChannelDto> addChannel(@RequestBody ChannelPostResquestDto channelPostResquestDto) {
+        Channel channel = channelService
+                .createChannel(channelMapper.channelPostResquestDtoToChannel(channelPostResquestDto));
         return ResponseEntity.ok(channelMapper.channelToDto(channel));
     }
 
@@ -111,8 +111,7 @@ public class ChannelController {
         Optional<Channel> existingChannel = channelService.getChannelById(id);
 
         if (existingChannel.isPresent()) {
-            channelDto.setId(id);
-            Channel updatedChannel = channelService.updateChannel(id, channelMapper.channelDtoToChannel(channelDto));
+            Channel updatedChannel = channelService.updateChannel(this.convert(channelDto, existingChannel.get()));
             return ResponseEntity.ok(channelMapper.channelToDto(updatedChannel));
         } else {
             return ResponseEntity.notFound().build();
@@ -141,5 +140,13 @@ public class ChannelController {
             channelService.deleteChannel(id);
             return ResponseEntity.ok().build();
         }
+    }
+
+    private Channel convert(ChannelDto channelDto, Channel channel) {
+        if (channelDto.getName() != null) {
+            channel.setName(channelDto.getName());
+        }
+
+        return channel;
     }
 }

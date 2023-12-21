@@ -1,7 +1,8 @@
 package com.slack.CrmBackend.services;
 
-import com.slack.CrmBackend.Service.ChannelService;
-import com.slack.CrmBackend.model.Channel;
+import java.util.List;
+import java.util.Optional;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,12 +12,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.slack.CrmBackend.Service.ChannelService;
+import com.slack.CrmBackend.model.Channel;
 
 /**
  * Tests for ChannelServices
- * Use of @Transactional annotation causes the test to be run within a transaction that is, by default, automatically rolled back after completion of the test.
+ * Use of @Transactional annotation causes the test to be run within a
+ * transaction that is, by default, automatically rolled back after completion
+ * of the test.
  */
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2) // Simulate a Database
@@ -59,8 +62,6 @@ class ChannelServicesTests {
         // Get one Channel
         Optional<Channel> foundChannel = channelService.getChannelById(testChannel1.getId());
 
-
-
         // Assert channel is found and correct
         Assertions.assertThat(foundChannel).isNotNull();
         Assertions.assertThat(foundChannel).isPresent();
@@ -94,10 +95,9 @@ class ChannelServicesTests {
         // Modify the Channel's properties
         testChannel.setName("UpdatedChannelName");
         testChannel.setMain(true);
-        Integer testChannelId = testChannel.getId();
 
         // Update the Channel in the repository
-        Channel updatedChannel = channelService.updateChannel(testChannelId, testChannel);
+        Channel updatedChannel = channelService.updateChannel(testChannel);
 
         // Assert that the Channel is updated successfully
         Assertions.assertThat(updatedChannel).isNotNull();

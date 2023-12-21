@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,26 +25,26 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "user_name")
+  @Column(name = "user_name", nullable = false)
   private String userName;
 
-  @Column(name = "first_name")
+  @Column(name = "first_name", nullable = true)
   private String firstName;
 
-  @Column(name = "last_name")
+  @Column(name = "last_name", nullable = true)
   private String lastName;
 
-  @Column(name = "email")
+  @Column(name = "email", nullable = true)
   private String email;
 
   @Column(name = "created_at")
-  private LocalDateTime createdAt = LocalDateTime.now();
+  private LocalDateTime createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = true)
   private LocalDateTime updatedAt;
 
   /** User messages */
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Message> messages = new ArrayList<>();
 
   public User() {
@@ -148,5 +149,19 @@ public class User {
   @PreUpdate
   public void onUpdate() {
     this.setUpdatedAt(LocalDateTime.now());
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        " id='" + getId() + "'" +
+        ", userName='" + getUserName() + "'" +
+        ", firstName='" + getFirstName() + "'" +
+        ", lastName='" + getLastName() + "'" +
+        ", email='" + getEmail() + "'" +
+        ", createdAt='" + getCreatedAt() + "'" +
+        ", updatedAt='" + getUpdatedAt() + "'" +
+        ", messages='" + getMessages() + "'" +
+        "}";
   }
 }

@@ -28,12 +28,12 @@ public class Message {
   private String content;
 
   /** User object */
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   /** Channel object */
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "channel_id", nullable = false)
   private Channel channel;
 

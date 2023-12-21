@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.dto.UserDto;
+import com.slack.CrmBackend.dto.UserPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.UserMapper;
 import com.slack.CrmBackend.model.User;
 
@@ -29,7 +29,6 @@ import com.slack.CrmBackend.model.User;
  * users.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("users")
 public class UserController {
 
@@ -85,8 +84,8 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        User user = userService.createUser(userMapper.userDtoToUser(userDto));
+    public ResponseEntity<UserDto> addUser(@RequestBody UserPostResquestDto userPostResquestDto) {
+        User user = userService.createUser(userMapper.userPostResquestDtoToUser(userPostResquestDto));
         return ResponseEntity.ok(userMapper.userToDto(user));
     }
 
@@ -106,8 +105,7 @@ public class UserController {
         Optional<User> existingUser = userService.getUserById(id);
 
         if (existingUser.isPresent()) {
-            userDto.setId(id);
-            User updatedUser = userService.updateUser(id, userMapper.userDtoToUser(userDto));
+            User updatedUser = userService.updateUser(this.convert(userDto, existingUser.get()));
             return ResponseEntity.ok(userMapper.userToDto(updatedUser));
         } else {
             return ResponseEntity.notFound().build();
@@ -133,5 +131,25 @@ public class UserController {
             userService.deleteUser(id);
             return ResponseEntity.ok().build();
         }
+    }
+
+    private User convert(UserDto userDto, User user) {
+        if (userDto.getUserName() != null) {
+            user.setUserName(userDto.getUserName());
+        }
+
+        if (userDto.getFirstName() != null) {
+            user.setFirstName(userDto.getFirstName());
+        }
+
+        if (userDto.getLastName() != null) {
+            user.setLastName(userDto.getLastName());
+        }
+
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        return user;
     }
 }

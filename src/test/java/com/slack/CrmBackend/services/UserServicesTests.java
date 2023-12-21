@@ -103,10 +103,8 @@ class UserServicesTests {
         testUser.setEmail("updated@email.com");
         testUser.setUpdatedAt(localNow);
 
-        Integer testUserId = testUser.getId();
-
         // Update the User in the repository
-        User updatedUser = userService.updateUser(testUserId, testUser);
+        User updatedUser = userService.updateUser(testUser);
 
         // Assert that the User is updated successfully
         Assertions.assertThat(updatedUser).isNotNull();
@@ -115,7 +113,6 @@ class UserServicesTests {
         Assertions.assertThat(updatedUser.getLastName()).isEqualTo("updatedLastName");
         Assertions.assertThat(updatedUser.getEmail()).isEqualTo("updated@email.com");
         Assertions.assertThat(updatedUser.getUpdatedAt()).isEqualTo(localNow);
-
     }
 
     /**
