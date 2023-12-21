@@ -2,6 +2,15 @@ package com.slack.CrmBackend.exception;
 
 import java.util.Date;
 
+/**
+ * ErrorMessage Class for used by
+ * Controller Exception Handler
+ * 
+ * @param int    statusCode
+ * @param Date   timestamp
+ * @param String message
+ * @param String description
+ */
 public class ErrorMessage {
     private int statusCode;
     private Date timestamp;
