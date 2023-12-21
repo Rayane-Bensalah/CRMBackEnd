@@ -5,6 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import com.slack.CrmBackend.dto.MessageDto;
@@ -14,7 +15,7 @@ import com.slack.CrmBackend.model.Message;
  * Message Dto Mapper
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {
-        Message.class, MessageDto.class })
+        Message.class, MessageDto.class }, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface MessageMapper {
     /**
      * Providing access to the mapper implementation and avoid test errors

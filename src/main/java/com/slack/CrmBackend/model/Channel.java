@@ -47,7 +47,6 @@ public class Channel {
   public Channel(String name, boolean isMain) {
     this.name = name;
     this.isMain = isMain;
-    createdAt = LocalDateTime.now();
   }
 
   /**
