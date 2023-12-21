@@ -111,8 +111,8 @@ public class ChannelController {
         Optional<Channel> existingChannel = channelService.getChannelById(id);
 
         if (existingChannel.isPresent()) {
-            channelDto.setId(id);
-            Channel updatedChannel = channelService.updateChannel(id, channelMapper.channelDtoToChannel(channelDto));
+            // channelDto.setId(id);
+            Channel updatedChannel = channelService.updateChannel(id, this.convert(channelDto, existingChannel.get()));
             return ResponseEntity.ok(channelMapper.channelToDto(updatedChannel));
         } else {
             return ResponseEntity.notFound().build();
@@ -141,5 +141,13 @@ public class ChannelController {
             channelService.deleteChannel(id);
             return ResponseEntity.ok().build();
         }
+    }
+
+    private Channel convert(ChannelDto channelDto, Channel channel) {
+        if (channelDto.getName() != null) {
+            channel.setName(channelDto.getName());
+        }
+
+        return channel;
     }
 }

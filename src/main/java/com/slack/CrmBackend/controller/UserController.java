@@ -105,8 +105,8 @@ public class UserController {
         Optional<User> existingUser = userService.getUserById(id);
 
         if (existingUser.isPresent()) {
-            userDto.setId(id);
-            User updatedUser = userService.updateUser(id, userMapper.userDtoToUser(userDto));
+            // userDto.setId(id);
+            User updatedUser = userService.updateUser(id, this.convert(userDto, existingUser.get()));
             return ResponseEntity.ok(userMapper.userToDto(updatedUser));
         } else {
             return ResponseEntity.notFound().build();
@@ -132,5 +132,25 @@ public class UserController {
             userService.deleteUser(id);
             return ResponseEntity.ok().build();
         }
+    }
+
+    private User convert(UserDto userDto, User user) {
+        if (userDto.getUserName() != null) {
+            user.setUserName(userDto.getUserName());
+        }
+
+        if (userDto.getFirstName() != null) {
+            user.setFirstName(userDto.getFirstName());
+        }
+
+        if (userDto.getLastName() != null) {
+            user.setLastName(userDto.getLastName());
+        }
+
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        return user;
     }
 }
