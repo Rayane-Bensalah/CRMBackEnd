@@ -1,7 +1,7 @@
 package com.slack.CrmBackend.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,8 @@ import com.slack.CrmBackend.Service.ChannelService;
 import com.slack.CrmBackend.dto.ChannelDto;
 import com.slack.CrmBackend.dto.ChannelPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.ChannelMapper;
+import com.slack.CrmBackend.exception.ResourceAlreadyExistsException;
+import com.slack.CrmBackend.exception.ResourceNotFoundException;
 import com.slack.CrmBackend.model.Channel;
 
 /**
@@ -51,8 +53,15 @@ public class ChannelController {
      * @return List<ChannelDto>
      */
     @GetMapping
-    public List<ChannelDto> getAllChannels() {
-        return channelMapper.channelsToDto(channelService.getAllChannels());
+    public ResponseEntity<List<ChannelDto>> getAllChannels() {
+        List<Channel> channels = new ArrayList<Channel>();
+        channelService.getAllChannels().forEach(channels::add);
+
+        if (channels.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(channelMapper.channelsToDto(channels), HttpStatus.OK);
     }
 
     /**
@@ -66,16 +75,10 @@ public class ChannelController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ChannelDto> getChannelById(@PathVariable("id") Integer id) {
+        Channel channel = channelService.getChannelById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Channel with id = " + id));
 
-        Optional<Channel> optional = channelService.getChannelById(id);
-
-        if (optional.isPresent()) {
-            Channel channel = optional.get();
-            return ResponseEntity.ok(channelMapper.channelToDto(channel));
-
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return new ResponseEntity<>(channelMapper.channelToDto(channel), HttpStatus.OK);
     }
 
     /**
@@ -91,7 +94,12 @@ public class ChannelController {
     public ResponseEntity<ChannelDto> addChannel(@RequestBody ChannelPostResquestDto channelPostResquestDto) {
         Channel channel = channelService
                 .createChannel(channelMapper.channelPostResquestDtoToChannel(channelPostResquestDto));
-        return ResponseEntity.ok(channelMapper.channelToDto(channel));
+
+        if (channel != null) {
+            return new ResponseEntity<>(channelMapper.channelToDto(channel), HttpStatus.CREATED);
+        }
+
+        throw new ResourceAlreadyExistsException("Channel Already exists");
     }
 
     /**
@@ -107,15 +115,12 @@ public class ChannelController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<ChannelDto> putChannel(@PathVariable Integer id, @RequestBody ChannelDto channelDto) {
+        Channel channel = channelService.getChannelById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Channel with id = " + id));
 
-        Optional<Channel> existingChannel = channelService.getChannelById(id);
+        Channel updatedChannel = channelService.updateChannel(this.convert(channelDto, channel));
 
-        if (existingChannel.isPresent()) {
-            Channel updatedChannel = channelService.updateChannel(this.convert(channelDto, existingChannel.get()));
-            return ResponseEntity.ok(channelMapper.channelToDto(updatedChannel));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return new ResponseEntity<>(channelMapper.channelToDto(updatedChannel), HttpStatus.OK);
     }
 
     /**
@@ -130,16 +135,12 @@ public class ChannelController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteChannel(@PathVariable("id") Integer id) {
+        Channel channel = channelService.getChannelById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Channel with id = " + id));
 
-        Optional<Channel> optional = channelService.getChannelById(id);
+        channelService.deleteChannel(channel);
 
-        if (optional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-
-        } else {
-            channelService.deleteChannel(id);
-            return ResponseEntity.ok().build();
-        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private Channel convert(ChannelDto channelDto, Channel channel) {

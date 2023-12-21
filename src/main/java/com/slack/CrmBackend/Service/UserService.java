@@ -36,9 +36,7 @@ public class UserService {
    * @return user saved
    */
   public User createUser(User nUser) {
-
-    Boolean exists = uRepository.existsByUserName(nUser.getUserName());
-    if (!exists) {
+    if (!uRepository.existsByUserName(nUser.getUserName())) {
       return uRepository.save(nUser);
     }
 
