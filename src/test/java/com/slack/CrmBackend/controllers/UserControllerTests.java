@@ -1,7 +1,6 @@
 package com.slack.CrmBackend.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -136,8 +135,8 @@ class UserControllerTests {
 
         // Mocking the service behavior
         Mockito.when(userService.getUserById(1)).thenReturn(Optional.of(existingUser));
-        Mockito.when(userService.updateUser(eq(1), any(User.class))).thenReturn(existingUser); // Returning the existing
-                                                                                               // user after update
+        Mockito.when(userService.updateUser(any(User.class))).thenReturn(existingUser); // Returning the existing
+                                                                                        // user after update
 
         mockMvc.perform(put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)

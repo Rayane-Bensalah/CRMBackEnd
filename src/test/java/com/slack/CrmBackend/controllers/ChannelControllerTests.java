@@ -1,7 +1,6 @@
 package com.slack.CrmBackend.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -129,12 +128,12 @@ class ChannelControllerTests {
 
         // Mocking the service behavior
         Mockito.when(channelService.getChannelById(1)).thenReturn(Optional.of(existingChannel));
-        Mockito.when(channelService.updateChannel(eq(1), any(Channel.class))).thenReturn(existingChannel); // Returning
-                                                                                                           // the
-                                                                                                           // existing
-                                                                                                           // channel
-                                                                                                           // after
-                                                                                                           // update
+        Mockito.when(channelService.updateChannel(any(Channel.class))).thenReturn(existingChannel); // Returning
+                                                                                                    // the
+                                                                                                    // existing
+                                                                                                    // channel
+                                                                                                    // after
+                                                                                                    // update
 
         mockMvc.perform(put("/channels/1")
                 .contentType(MediaType.APPLICATION_JSON)

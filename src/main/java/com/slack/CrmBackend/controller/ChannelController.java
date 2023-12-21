@@ -111,8 +111,7 @@ public class ChannelController {
         Optional<Channel> existingChannel = channelService.getChannelById(id);
 
         if (existingChannel.isPresent()) {
-            // channelDto.setId(id);
-            Channel updatedChannel = channelService.updateChannel(id, this.convert(channelDto, existingChannel.get()));
+            Channel updatedChannel = channelService.updateChannel(this.convert(channelDto, existingChannel.get()));
             return ResponseEntity.ok(channelMapper.channelToDto(updatedChannel));
         } else {
             return ResponseEntity.notFound().build();

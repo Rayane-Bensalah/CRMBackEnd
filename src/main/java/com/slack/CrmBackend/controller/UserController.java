@@ -105,8 +105,7 @@ public class UserController {
         Optional<User> existingUser = userService.getUserById(id);
 
         if (existingUser.isPresent()) {
-            // userDto.setId(id);
-            User updatedUser = userService.updateUser(id, this.convert(userDto, existingUser.get()));
+            User updatedUser = userService.updateUser(this.convert(userDto, existingUser.get()));
             return ResponseEntity.ok(userMapper.userToDto(updatedUser));
         } else {
             return ResponseEntity.notFound().build();
