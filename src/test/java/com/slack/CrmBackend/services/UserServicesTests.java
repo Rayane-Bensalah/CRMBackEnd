@@ -124,10 +124,8 @@ class UserServicesTests {
         User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
         userService.createUser(testUser);
 
-        Integer testUserId = testUser.getId();
-
         // Delete the User from the repository
-        userService.deleteUser(testUserId);
+        userService.deleteUser(testUser);
 
         // Try to retrieve the deleted User
         User deletedUser = userService.getUserById(testUser.getId()).orElse(null);

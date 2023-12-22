@@ -114,10 +114,8 @@ class ChannelServicesTests {
         Channel testChannel = new Channel("testChannelname", false);
         channelService.createChannel(testChannel);
 
-        Integer testChannelId = testChannel.getId();
-
         // Delete the Channel from the repository
-        channelService.deleteChannel(testChannelId);
+        channelService.deleteChannel(testChannel);
 
         // Try to retrieve the deleted Channel
         Channel deletedChannel = channelService.getChannelById(testChannel.getId()).orElse(null);

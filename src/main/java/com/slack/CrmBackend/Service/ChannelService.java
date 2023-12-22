@@ -14,13 +14,13 @@ import com.slack.CrmBackend.repository.ChannelRepository;
 public class ChannelService {
 
   @Autowired
-  ChannelRepository uRepository;
+  ChannelRepository cRepository;
 
   /**
    * @return all Channel found
    */
   public List<Channel> getAllChannels() {
-    return uRepository.findAll();
+    return cRepository.findAll();
   }
 
   /**
@@ -28,7 +28,7 @@ public class ChannelService {
    * @return channel found
    */
   public Optional<Channel> getChannelById(Integer id) {
-    return uRepository.findById(id);
+    return cRepository.findById(id);
   }
 
   /**
@@ -36,7 +36,12 @@ public class ChannelService {
    * @return channel saved
    */
   public Channel createChannel(Channel nChannel) {
-    return uRepository.save(nChannel);
+
+    if (!cRepository.existsByName(nChannel.getName())) {
+      return cRepository.save(nChannel);
+    }
+
+    return null;
   }
 
   /**
@@ -44,13 +49,13 @@ public class ChannelService {
    * @return saved channel or null
    */
   public Channel updateChannel(Channel updateChannel) {
-    return uRepository.save(updateChannel);
+    return cRepository.save(updateChannel);
   }
 
   /**
    * @param channelId Id of channel to delete
    */
-  public void deleteChannel(Integer channelId) {
-    uRepository.deleteById(channelId);
+  public void deleteChannel(Channel channel) {
+    cRepository.deleteById(channel.getId());
   }
 }

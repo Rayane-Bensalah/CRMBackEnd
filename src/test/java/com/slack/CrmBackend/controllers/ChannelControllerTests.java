@@ -106,7 +106,7 @@ class ChannelControllerTests {
         mockMvc.perform(post("/channels")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(channel)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("testChannelname1"))
                 .andExpect(jsonPath("$.main").value("false"));

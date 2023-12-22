@@ -36,7 +36,12 @@ public class UserService {
    * @return user saved
    */
   public User createUser(User nUser) {
-    return uRepository.save(nUser);
+
+    if (!uRepository.existsByUserName(nUser.getUserName())) {
+      return uRepository.save(nUser);
+    } else {
+      return uRepository.findByUserName(nUser.getUserName());
+    }
   }
 
   /**
@@ -50,7 +55,7 @@ public class UserService {
   /**
    * @param userId Id of user to delete
    */
-  public void deleteUser(Integer userId) {
-    uRepository.deleteById(userId);
+  public void deleteUser(User user) {
+    uRepository.deleteById(user.getId());
   }
 }

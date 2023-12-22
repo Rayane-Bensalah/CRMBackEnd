@@ -10,4 +10,5 @@ import com.slack.CrmBackend.model.Channel;
  */
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Integer> {
+    boolean existsByName(String name);
 }
