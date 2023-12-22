@@ -37,8 +37,8 @@ public interface MessageMapper {
      * @param messages
      * @return messagesDto
      */
-    // @Mapping(target = "channel", ignore = false)
-    // @Mapping(target = "user", ignore = false)
+     @Mapping(target = "channel", ignore = true)
+     @Mapping(target = "user", ignore = true)
     List<MessageDto> messagesToDto(List<Message> messages);
 
     /**

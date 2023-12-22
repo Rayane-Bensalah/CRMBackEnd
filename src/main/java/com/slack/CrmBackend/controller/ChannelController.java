@@ -2,19 +2,16 @@ package com.slack.CrmBackend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.slack.CrmBackend.Service.MessageService;
+import com.slack.CrmBackend.dto.MessageDto;
+import com.slack.CrmBackend.dto.mapper.MessageMapper;
+import com.slack.CrmBackend.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.slack.CrmBackend.Service.ChannelService;
 import com.slack.CrmBackend.dto.ChannelDto;
@@ -32,6 +29,7 @@ import com.slack.CrmBackend.model.Channel;
  */
 @RestController
 @RequestMapping("channels")
+@CrossOrigin({"http://localhost:4200", "http://127.0.0.1:4200"})
 public class ChannelController {
 
     /**
@@ -41,11 +39,17 @@ public class ChannelController {
     @Autowired
     ChannelService channelService;
 
+    @Autowired
+    MessageService messageService;
+
     /**
      * Autowiring ChannelMapper for transferring data between services
      */
     @Autowired
     ChannelMapper channelMapper;
+
+    @Autowired
+    MessageMapper messageMapper;
 
     /**
      * Endpoint to retrieve all channels
@@ -143,6 +147,27 @@ public class ChannelController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Endpoint to retrieve all messages by their channelID.
+     * Use Optional to handle the possibility of a null result.
+     * Return a response with the List of messages if it exists.
+     * Return a not found response if the message doesn't exist.
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}/messages")
+    public ResponseEntity<List<MessageDto>> getMessagesByChannelId(@PathVariable("id") Integer id) {
+        List<Message> channelMessages = new ArrayList<>();
+        Optional<List<Message>> optional = messageService.getMessagesChannel(id);
+
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            channelMessages = optional.get();
+            return new ResponseEntity<>(messageMapper.messagesToDto(channelMessages), HttpStatus.OK);
+        }
+    }
+
     private Channel convert(ChannelDto channelDto, Channel channel) {
         if (channelDto.getName() != null) {
             channel.setName(channelDto.getName());
@@ -150,4 +175,5 @@ public class ChannelController {
 
         return channel;
     }
+
 }

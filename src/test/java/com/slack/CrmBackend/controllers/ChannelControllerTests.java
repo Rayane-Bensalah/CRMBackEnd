@@ -9,9 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
+import com.slack.CrmBackend.Service.MessageService;
+import com.slack.CrmBackend.Service.UserService;
+import com.slack.CrmBackend.model.Message;
+import com.slack.CrmBackend.model.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,12 @@ class ChannelControllerTests {
 
     @MockBean
     private ChannelService channelService;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private MessageService messageService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -157,5 +167,39 @@ class ChannelControllerTests {
 
         mockMvc.perform(delete("/channels/1"))
                 .andExpect(status().isNotFound());
+    }
+
+    /**
+     * test getMessagesChannel()
+     */
+    @Test
+    void ChannelController_GetMessagesByChannelId() throws Exception {
+        // Create and save a test User
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userService.createUser(testUser);
+        testUser.setId(1);
+
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        channelService.createChannel(testChannel);
+        testChannel.setId(1);
+
+        // Create and save a test Message
+        Message testMessage = new Message("testContent", testUser, testChannel);
+        messageService.createMessage(testMessage);
+        testMessage.setId(1);
+
+        // Create a list with
+        List<Message> messageList = Collections.singletonList(testMessage);
+
+        Mockito.when(messageService.getMessagesChannel(1)).thenReturn(Optional.of(messageList));
+
+
+        mockMvc.perform(get("/channels/1/messages"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].content").value("testContent"))
+                .andExpect(jsonPath("$[0].user.id").value(testUser.getId()))
+                .andExpect(jsonPath("$[0].channel.id").value(testChannel.getId()));
     }
 }

@@ -1,10 +1,14 @@
 package com.slack.CrmBackend.Service;
 
 import com.slack.CrmBackend.model.Message;
+import com.slack.CrmBackend.repository.ChannelRepository;
 import com.slack.CrmBackend.repository.MessageRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /** MessageService */
@@ -56,6 +60,22 @@ public class MessageService {
    */
   public void deleteMessage(Integer messageId) {
     mRepository.deleteById(messageId);
+  }
+
+  /**
+   * Method to get all messages with given channelId
+   * @param channelId
+   * @return List of Message
+   */
+  public Optional<List<Message>> getMessagesChannel(Integer channelId) {
+    List<Message> channelMessages = new ArrayList<>();
+
+    for (Message message : this.mRepository.findAll()) {
+      if (message.getChannel().getId().equals(channelId)){
+        channelMessages.add(message);
+      }
+    }
+    return Optional.of(channelMessages);
   }
 
   public MessageRepository getmRepository() {
