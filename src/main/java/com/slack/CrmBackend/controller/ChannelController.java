@@ -2,8 +2,11 @@ package com.slack.CrmBackend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.slack.CrmBackend.Service.MessageService;
+import com.slack.CrmBackend.dto.MessageDto;
+import com.slack.CrmBackend.dto.mapper.MessageMapper;
 import com.slack.CrmBackend.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +47,9 @@ public class ChannelController {
      */
     @Autowired
     ChannelMapper channelMapper;
+
+    @Autowired
+    MessageMapper messageMapper;
 
     /**
      * Endpoint to retrieve all channels
@@ -150,7 +156,7 @@ public class ChannelController {
      * @return
      */
     @GetMapping("/{id}/messages")
-    public ResponseEntity<List<Message>> getMessagesByChannelId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<MessageDto>> getMessagesByChannelId(@PathVariable("id") Integer id) {
         List<Message> channelMessages = new ArrayList<>();
         Optional<List<Message>> optional = messageService.getMessagesChannel(id);
 
@@ -158,7 +164,7 @@ public class ChannelController {
             return ResponseEntity.notFound().build();
         } else {
             channelMessages = optional.get();
-            return ResponseEntity.ok(channelMessages);
+            return new ResponseEntity<>(messageMapper.messagesToDto(channelMessages), HttpStatus.OK);
         }
     }
 

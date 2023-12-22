@@ -68,19 +68,14 @@ public class MessageService {
    * @return List of Message
    */
   public Optional<List<Message>> getMessagesChannel(Integer channelId) {
-    ChannelService channelService = new ChannelService();
     List<Message> channelMessages = new ArrayList<>();
-    
-    if (channelService.getChannelById(channelId).isPresent()){
-      for (Message message : this.mRepository.findAll()) {
-        if (message.getChannel().getId().equals(channelId)){
-          channelMessages.add(message);
-        }
+
+    for (Message message : this.mRepository.findAll()) {
+      if (message.getChannel().getId().equals(channelId)){
+        channelMessages.add(message);
       }
-      return Optional.of(channelMessages);
-    } else {
-      return Optional.empty();
     }
+    return Optional.of(channelMessages);
   }
 
   public MessageRepository getmRepository() {
