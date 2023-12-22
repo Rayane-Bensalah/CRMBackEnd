@@ -1,6 +1,9 @@
 package com.slack.CrmBackend.services;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -134,6 +137,35 @@ class MessageServicesTests {
 
         // Assert that the Message is deleted successfully
         Assertions.assertThat(deletedMessage).isNull();
+    }
+
+    /**
+     * test getMessagesChannel()
+     */
+    @Test
+    void MessageService_GetMessagesChannel() {
+        // Create and save a test User
+        User testUser = new User("testUsername", "testFirstname", "testLastname", "test@email.com");
+        userService.createUser(testUser);
+
+        // Create and save a test Channel
+        Channel testChannel = new Channel("testChannelname", false);
+        channelService.createChannel(testChannel);
+
+        // Create and save a test Message
+        Message testMessage = new Message("testContent", testUser, testChannel);
+        messageService.createMessage(testMessage);
+
+        // Create a list with
+        List<Message> messageList = Collections.singletonList(testMessage);
+        List<Message> optionalMessagelist = new ArrayList<>();
+        Optional<List<Message>> returnedOptonal = this.messageService.getMessagesChannel(testMessage.getId());
+
+        if (returnedOptonal.isPresent()){
+            optionalMessagelist = returnedOptonal.get();
+        }
+
+        Assertions.assertThat(optionalMessagelist).isEqualTo(messageList);
     }
 
 }
