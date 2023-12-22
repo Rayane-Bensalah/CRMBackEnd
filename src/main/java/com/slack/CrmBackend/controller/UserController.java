@@ -1,7 +1,7 @@
 package com.slack.CrmBackend.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,7 @@ import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.dto.UserDto;
 import com.slack.CrmBackend.dto.UserPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.UserMapper;
+import com.slack.CrmBackend.exception.ResourceNotFoundException;
 import com.slack.CrmBackend.model.User;
 
 /**
@@ -50,8 +51,15 @@ public class UserController {
      * @return List<Users>
      */
     @GetMapping
-    public List<UserDto> getAllUsers() {
-        return userMapper.usersToUsersDto(userService.getAllUsers());
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<User> users = new ArrayList<User>();
+        userService.getAllUsers().forEach(users::add);
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(userMapper.usersToUsersDto(users), HttpStatus.OK);
     }
 
     /**
@@ -65,13 +73,10 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Integer id) {
-        Optional<User> optional = userService.getUserById(id);
-        if (optional.isPresent()) {
-            User user = optional.get();
-            return ResponseEntity.ok(userMapper.userToDto(user));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        User user = userService.getUserById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + id));
+
+        return new ResponseEntity<>(userMapper.userToDto(user), HttpStatus.OK);
     }
 
     /**
@@ -86,7 +91,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> addUser(@RequestBody UserPostResquestDto userPostResquestDto) {
         User user = userService.createUser(userMapper.userPostResquestDtoToUser(userPostResquestDto));
-        return ResponseEntity.ok(userMapper.userToDto(user));
+        return new ResponseEntity<>(userMapper.userToDto(user), HttpStatus.CREATED);
     }
 
     /**
@@ -102,14 +107,12 @@ public class UserController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> putUser(@PathVariable Integer id, @RequestBody UserDto userDto) {
-        Optional<User> existingUser = userService.getUserById(id);
+        User user = userService.getUserById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + id));
 
-        if (existingUser.isPresent()) {
-            User updatedUser = userService.updateUser(this.convert(userDto, existingUser.get()));
-            return ResponseEntity.ok(userMapper.userToDto(updatedUser));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        User updatedUser = userService.updateUser(this.convert(userDto, user));
+
+        return new ResponseEntity<>(userMapper.userToDto(updatedUser), HttpStatus.OK);
     }
 
     /**
@@ -124,13 +127,12 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
-        Optional<User> optional = userService.getUserById(id);
-        if (optional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            userService.deleteUser(id);
-            return ResponseEntity.ok().build();
-        }
+        User user = userService.getUserById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + id));
+
+        userService.deleteUser(user);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private User convert(UserDto userDto, User user) {
