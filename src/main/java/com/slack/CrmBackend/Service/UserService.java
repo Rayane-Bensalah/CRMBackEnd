@@ -36,11 +36,12 @@ public class UserService {
    * @return user saved
    */
   public User createUser(User nUser) {
+
     if (!uRepository.existsByUserName(nUser.getUserName())) {
       return uRepository.save(nUser);
+    } else {
+      return uRepository.findByUserName(nUser.getUserName());
     }
-
-    return null;
   }
 
   /**

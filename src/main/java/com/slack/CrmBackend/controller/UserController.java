@@ -20,7 +20,6 @@ import com.slack.CrmBackend.Service.UserService;
 import com.slack.CrmBackend.dto.UserDto;
 import com.slack.CrmBackend.dto.UserPostResquestDto;
 import com.slack.CrmBackend.dto.mapper.UserMapper;
-import com.slack.CrmBackend.exception.ResourceAlreadyExistsException;
 import com.slack.CrmBackend.exception.ResourceNotFoundException;
 import com.slack.CrmBackend.model.User;
 
@@ -92,12 +91,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> addUser(@RequestBody UserPostResquestDto userPostResquestDto) {
         User user = userService.createUser(userMapper.userPostResquestDtoToUser(userPostResquestDto));
-
-        if (user != null) {
-            return new ResponseEntity<>(userMapper.userToDto(user), HttpStatus.CREATED);
-        }
-
-        throw new ResourceAlreadyExistsException("User Already exists");
+        return new ResponseEntity<>(userMapper.userToDto(user), HttpStatus.CREATED);
     }
 
     /**

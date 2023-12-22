@@ -11,4 +11,6 @@ import com.slack.CrmBackend.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByUserName(String userName);
+
+    User findByUserName(String userName);
 }
